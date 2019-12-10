@@ -26,13 +26,9 @@ android {
 
 
         python{
-
-
             pip{
-                install "pytube"
+                install 'pytube'
             }
-
-
         }
 
 
