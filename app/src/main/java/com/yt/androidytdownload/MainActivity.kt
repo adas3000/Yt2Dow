@@ -1,11 +1,16 @@
 package com.yt.androidytdownload
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import com.yt.androidytdownload.enum.Kind
@@ -23,7 +28,11 @@ class MainActivity : AppCompatActivity() {
 
         radioGroup.check(radioButton_video.id)
 
-        Log.d("fsystempath:",this.filesDir.path.toString())
+
+        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
+            Toast.makeText(this,"GRANTED", LENGTH_LONG).show()
+        else
+            Toast.makeText(this,"NOT GRANTED", LENGTH_LONG).show()
     }
 
     fun onRadioButtonClick(view: View) {
@@ -52,16 +61,13 @@ class MainActivity : AppCompatActivity() {
         val list: List<PyObject> = pyObj.callAttr("getList", "Hello", "Cito", "Wygladasz", "Jak", "Molotow").asList()
 
 
-
         for (i in list)
             Log.d("Item:", i.toString())
 
-         val filePath:String = this.filesDir.path.toString()
 
-        //val file : File = File(filePath+"/3 years of Computer Science in 8 minutes.mp4")
 
         Thread(Runnable {
-            pyObj.callAttr("doDownload","https://youtu.be/ReVeUvwTGdU",filePath)
+            pyObj.callAttr("doDownload","https://youtu.be/ReVeUvwTGdU","")
         }).start()
 
     }
