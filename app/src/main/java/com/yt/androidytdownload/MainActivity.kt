@@ -21,6 +21,11 @@ class MainActivity : AppCompatActivity() {
 
         radioGroup.check(radioButton_video.id)
 
+
+        Log.d("IS NULL:", (Python.getInstance().getModule("main") == null).toString())
+
+        val module:PyObject = Python.getInstance().getModule("main")
+        module.callAttr("getList","1","2")
     }
 
     fun onRadioButtonClick(view: View) {
@@ -46,10 +51,12 @@ class MainActivity : AppCompatActivity() {
         val pyObj: PyObject = python.getModule("main")
 
 
-        val list:List<PyObject> = pyObj.callAttr("new_list","Hello","Cito","Wygladasz","Jak","Molotow").asList()
+        val list: List<PyObject> = pyObj.callAttr("getList", "Hello", "Cito", "Wygladasz", "Jak", "Molotow").asList()
 
-        for(i in list)
-            Log.d("Item:",i.toString())
+
+
+        for (i in list)
+            Log.d("Item:", i.toString())
 
 
         // pyObj.callAttr("doDownload","https://www.youtube.com/watch?v=pXdY1B-KVJg",true)
