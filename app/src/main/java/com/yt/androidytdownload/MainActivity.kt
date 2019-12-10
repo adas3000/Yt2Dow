@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         val python: Python = Python.getInstance()
         val pyObj: PyObject = python.getModule("main")
 
+
         val list:List<PyObject> = pyObj.callAttr("new_list","Hello","Cito","Wygladasz","Jak","Molotow").asList()
 
         for(i in list)
