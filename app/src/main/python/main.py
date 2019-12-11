@@ -12,16 +12,19 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
 
    video = yt.streams.filter(progressive=True,file_extension=kind).order_by('resolution').first()
    global file_size
+   global title
    file_size = video.filesize
+   title = video.title
    video.download()
-   #send title etc. thorught socket 
+   
 
 
 
 
 def progress_function(stream,chunk,file_handle,reamining):
     percent = (100*(file_size-reamining))/file_size
-    print("{:00.0f}% downloaded".format(percent))
+    value = "{:00.0f}% downloaded".format(percent)
+    print(value)
     #send percent via socket conn
 
 
