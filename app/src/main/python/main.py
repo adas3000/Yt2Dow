@@ -3,10 +3,6 @@ import send
 
 
 def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
-   kind = kind.lower()   
-   if not kind=="mp3" or not kind=="mp4":
-      pass
-      #send error msg
    yt = YouTube(url,on_progress_callback=progress_function)
    
    video = yt.streams.filter(progressive=True,file_extension=kind).order_by('resolution').first()

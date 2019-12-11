@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         radioGroup.check(radioButton_video.id)
-        progressBar2.visibility = View.INVISIBLE
+        progressBar.visibility = View.INVISIBLE
 
         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             Toast.makeText(this, "GRANTED", LENGTH_LONG).show()
@@ -63,13 +63,19 @@ class MainActivity : AppCompatActivity() {
         val python: Python = Python.getInstance()
         val pyObj: PyObject = python.getModule("main")
 
+        val kindstr=kind.toString().toLowerCase()
+
+        if(!kindstr.equals("mp3") && !kindstr.equals("mp4")){
+            Toast.makeText(this,"Non valid file input must be mp3 or mp4",Toast.LENGTH_LONG).show()
+            return
+        }
 
         Thread(Runnable {
-            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=w1uDMcIXCnY&list=RDw1uDMcIXCnY&start_radio=1", kind.toString())
+            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=pXdY1B-KVJg", kind.toString())
         }).start()
 
 
-        val downloadTask:DownloadTask = DownloadTask(this,progressBar2)
+        val downloadTask:DownloadTask = DownloadTask(this,progressBar)
 
         downloadTask.execute()
 
