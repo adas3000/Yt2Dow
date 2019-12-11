@@ -60,19 +60,14 @@ class MainActivity : AppCompatActivity() {
 
         val url: String = editText.text.toString()
 
-
         val python: Python = Python.getInstance()
         val pyObj: PyObject = python.getModule("main")
 
         val kindstr=kind.toString().toLowerCase()
 
-        if(!kindstr.equals("mp3") && !kindstr.equals("mp4")){
-            Toast.makeText(this,"Non valid file input must be mp3 or mp4",LENGTH_LONG).show()
-            return
-        }
 
         Thread(Runnable {
-            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=9B5OXpt53DY", kindstr)
+            pyObj.callAttr("doDownload", url, kindstr)
         }).start()
 
 

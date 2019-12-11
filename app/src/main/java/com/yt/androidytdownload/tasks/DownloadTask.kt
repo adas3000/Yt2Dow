@@ -11,7 +11,7 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-class DownloadTask : AsyncTask<String, String, Void> {
+class DownloadTask : AsyncTask<String, String, String> {
 
 
     private val context: Context
@@ -27,7 +27,7 @@ class DownloadTask : AsyncTask<String, String, Void> {
         progressBar.visibility = View.VISIBLE
     }
 
-    override fun doInBackground(vararg p0: String?): Void? {
+    override fun doInBackground(vararg p0: String?): String? {
 
         val socket: DatagramSocket = DatagramSocket(5005)
         var running: Boolean = true
@@ -44,8 +44,9 @@ class DownloadTask : AsyncTask<String, String, Void> {
             packet = DatagramPacket(buffer, buffer.size, addr, port)
             val received: String = String(packet.data, 0, packet.length)
 
-            if (received.length<5)
-                Log.d("Msg:",received)
+            if (received.contains("error")){
+                return received
+            }
             else
                 publishProgress(received)
 
@@ -55,7 +56,7 @@ class DownloadTask : AsyncTask<String, String, Void> {
         }
         socket.close()
 
-        return null
+        return "success"
     }
 
     override fun onProgressUpdate(vararg values: String?) {
@@ -66,8 +67,17 @@ class DownloadTask : AsyncTask<String, String, Void> {
     }
 
 
-    override fun onPostExecute(result: Void?) {
-        Toast.makeText(context, "Downloaded!", Toast.LENGTH_LONG).show()
+    override fun onPostExecute(result: String?) {
+        Log.d("POST","POST EXECUTE EXECUTING")
+        if(result != null){
+            if(result.contains("success")){
+                Toast.makeText(context, "Downloaded!", Toast.LENGTH_LONG).show()
+            }
+            else {
+                Toast.makeText(context,"Error occurred check whether url is valid.\nError message:"+result,
+                    Toast.LENGTH_LONG).show()
+            }
+        }
         progressBar.visibility = View.INVISIBLE
         progressBar.progress=0
     }

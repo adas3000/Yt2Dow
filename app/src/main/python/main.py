@@ -4,10 +4,15 @@ import send
 
 def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
 
-   yt = YouTube(url,on_progress_callback=progress_function)
-   
-   video = None
+   yt = None
+   try:
+      yt = YouTube(url,on_progress_callback=progress_function)
+   except:
+      print("Error")
+      send.sendPacket("error:Non valid youtube url link!")
+      return 
 
+   video = None
    if kind == 'mp3':
       video = yt.streams.filter(only_audio=True).first()
    else:
@@ -35,4 +40,3 @@ def percent(bytes,total):
 
 def getList(*args):
         return list(args)
-
