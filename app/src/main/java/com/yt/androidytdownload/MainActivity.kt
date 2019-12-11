@@ -4,18 +4,21 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.RadioButton
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
-import android.widget.Toast.LENGTH_SHORT
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import com.yt.androidytdownload.enum.Kind
+import com.yt.androidytdownload.tasks.DownloadTask
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         radioGroup.check(radioButton_video.id)
-        progressBar2.visibility=View.GONE
+        progressBar2.visibility = View.INVISIBLE
 
-        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
-            Toast.makeText(this,"GRANTED", LENGTH_LONG).show()
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            Toast.makeText(this, "GRANTED", LENGTH_LONG).show()
         else
-            Toast.makeText(this,"NOT GRANTED", LENGTH_LONG).show()
+            Toast.makeText(this, "NOT GRANTED", LENGTH_LONG).show()
     }
 
     fun onRadioButtonClick(view: View) {
@@ -54,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     fun onDownloadClick(view: View) {
 
-        val url:String = editText.text.toString()
+        val url: String = editText.text.toString()
 
 
         val python: Python = Python.getInstance()
@@ -62,12 +65,41 @@ class MainActivity : AppCompatActivity() {
 
 
         Thread(Runnable {
-             pyObj.callAttr("doDownload",url,kind.toString())
+            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=pXdY1B-KVJg"/*url*/, kind.toString())
         }).start()
 
+        /*
+        Thread(Runnable {
+
+            val socket: DatagramSocket = DatagramSocket(5005)
+            var running: Boolean = true
+            var buffer = ByteArray(256)
+            var packet: DatagramPacket = DatagramPacket(buffer, buffer.size)
+
+            while (running) {
 
 
+                socket.receive(packet)
 
+                val addr: InetAddress = packet.address
+                val port = packet.port
+
+                packet = DatagramPacket(buffer, buffer.size, addr, port)
+                val received: String = String(packet.data, 0, packet.length)
+
+                Log.d("Recived:",received)
+                if (received.contains("100%")) {
+                    running = false
+                }
+            }
+            Toast.makeText(this, "Downloaded!", LENGTH_LONG).show()
+
+        }).start()
+        */
+
+        val downloadTask:DownloadTask = DownloadTask(this,progressBar2)
+
+        downloadTask.execute()
 
 
     }
