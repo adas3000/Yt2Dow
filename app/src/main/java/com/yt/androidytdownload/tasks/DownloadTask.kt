@@ -14,12 +14,12 @@ import java.net.InetAddress
 class DownloadTask : AsyncTask<String, String, Void> {
 
 
-    private val context:Context
-    private val progressBar:ProgressBar
+    private val context: Context
+    private val progressBar: ProgressBar
 
-    constructor(context:Context,progressBar: ProgressBar ){
+    constructor(context: Context, progressBar: ProgressBar) {
         this.context = context
-        this.progressBar=progressBar
+        this.progressBar = progressBar
     }
 
     override fun onPreExecute() {
@@ -44,7 +44,10 @@ class DownloadTask : AsyncTask<String, String, Void> {
             packet = DatagramPacket(buffer, buffer.size, addr, port)
             val received: String = String(packet.data, 0, packet.length)
 
-            publishProgress(received)
+            if (received.length<5)
+                Log.d("Msg:",received)
+            else
+                publishProgress(received)
 
             if (received.contains("100%")) {
                 running = false
@@ -53,16 +56,16 @@ class DownloadTask : AsyncTask<String, String, Void> {
         return null
     }
 
-        override fun onProgressUpdate(vararg values: String?) {
-            if(values[0]!=null){
-                Log.d("Recived:", values[0])
-                progressBar.progress= GetDecFromStr(values[0].toString())
-            }
-        }
-
-
-        override fun onPostExecute(result: Void?) {
-            Toast.makeText(context,"Downloaded!",Toast.LENGTH_LONG).show()
-            progressBar.visibility = View.INVISIBLE
+    override fun onProgressUpdate(vararg values: String?) {
+        if (values[0] != null) {
+            Log.d("Recived:", values[0])
+            progressBar.progress = GetDecFromStr(values[0].toString())
         }
     }
+
+
+    override fun onPostExecute(result: Void?) {
+        Toast.makeText(context, "Downloaded!", Toast.LENGTH_LONG).show()
+        progressBar.visibility = View.INVISIBLE
+    }
+}

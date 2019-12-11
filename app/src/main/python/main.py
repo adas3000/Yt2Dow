@@ -19,12 +19,11 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    file_size = video.filesize
    title = video.title
    video.download(output_path=saveIn)
-   
+
 
 def progress_function(stream,chunk,file_handle,reamining):
     percent = (100*(file_size-reamining))/file_size
     value = "{:00.0f}% downloaded".format(percent)
-    #value = "{:00.0f}".format(percent)
     send.sendPacket(value)
 
 

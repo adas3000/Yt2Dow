@@ -11,4 +11,5 @@
 /build
 /captures
 .externalNativeBuild
-app/src/main/python/pyyttest.py
+/app/src/main/python/pyyttest.py
+/app/src/main/python/Kotlin Crash Course for Java Developers.mp4
