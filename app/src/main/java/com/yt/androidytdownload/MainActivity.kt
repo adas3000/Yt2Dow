@@ -54,21 +54,21 @@ class MainActivity : AppCompatActivity() {
 
     fun onDownloadClick(view: View) {
 
+        val url:String = editText.text.toString()
+
+
         val python: Python = Python.getInstance()
         val pyObj: PyObject = python.getModule("main")
-
-
-        val list: List<PyObject> = pyObj.callAttr("getList", "Hello", "Cito", "Wygladasz", "Jak", "Molotow").asList()
-
-
-        for (i in list)
-            Log.d("Item:", i.toString())
-
-
+        
 
         Thread(Runnable {
-            pyObj.callAttr("doDownload","https://youtu.be/ReVeUvwTGdU","")
+             pyObj.callAttr("doDownload",url,kind.toString(),"")
         }).start()
+
+
+
+
+
 
     }
 
