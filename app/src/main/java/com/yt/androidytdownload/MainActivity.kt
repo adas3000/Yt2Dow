@@ -13,6 +13,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
+import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.tasks.DownloadTask
 import kotlinx.android.synthetic.main.activity_main.*
