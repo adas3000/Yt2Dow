@@ -3,9 +3,17 @@ import send
 
 
 def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
+
    yt = YouTube(url,on_progress_callback=progress_function)
    
-   video = yt.streams.filter(progressive=True,file_extension=kind).order_by('resolution').first()
+   video = None
+
+   if kind == 'mp3':
+      video = yt.streams.filter(only_audio=True).first()
+   else:
+      video = yt.streams.filter(adaptive=True).first()
+
+
    global file_size
    global title
    file_size = video.filesize

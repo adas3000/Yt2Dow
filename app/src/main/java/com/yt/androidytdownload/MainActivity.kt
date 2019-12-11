@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         Thread(Runnable {
-            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=pXdY1B-KVJg", kind.toString())
+            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=pXdY1B-KVJg", kindstr)
         }).start()
 
 
