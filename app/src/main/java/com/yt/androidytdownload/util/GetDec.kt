@@ -5,17 +5,19 @@ import java.lang.StringBuilder
 fun GetDecFromStr(str:String):Int{
 
     var founded = false
-    var str:StringBuilder= StringBuilder("")
-    for(i in str.length until str.length){
+    var sBstr:StringBuilder= StringBuilder("")
+
+
+    for(i in 0 until str.length){
 
         if(!founded && str[i].isDigit()){
             founded = true
-            str.append(i)
+            sBstr.append(str[i])
         }
         else if(founded && str[i].isDigit())
-            str.append(i)
+            sBstr.append(str[i])
         else if(founded && !str[i].isDigit())
             break
     }
-    return str.toString().toInt()
+    return sBstr.toString().toInt()
 }

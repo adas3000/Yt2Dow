@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.yt.androidytdownload.util.GetDecFromStr
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -53,8 +54,10 @@ class DownloadTask : AsyncTask<String, String, Void> {
     }
 
         override fun onProgressUpdate(vararg values: String?) {
-            if(values[0]!=null)
-            Log.d("Recived:", values[0])
+            if(values[0]!=null){
+                Log.d("Recived:", values[0])
+                progressBar.progress= GetDecFromStr(values[0].toString())
+            }
         }
 
 
