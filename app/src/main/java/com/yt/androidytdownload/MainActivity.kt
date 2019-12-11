@@ -19,10 +19,12 @@ import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.tasks.DownloadTask
 import com.yt.androidytdownload.tasks.ValidTask
+import com.yt.androidytdownload.tasks.VideoDataTask
 import kotlinx.android.synthetic.main.activity_main.*
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +42,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "GRANTED", LENGTH_LONG).show()
         else
             Toast.makeText(this, "NOT GRANTED", LENGTH_LONG).show()
+
+        editText.setText("https://www.youtube.com/watch?v=SOzuX53ShBM")
     }
 
     fun onRadioButtonClick(view: View) {
@@ -69,19 +73,8 @@ class MainActivity : AppCompatActivity() {
         val kindstr=kind.toString().toLowerCase()
 
         Thread(Runnable {
-            pyObj.callAttr("doDownload", url, kindstr)
+            pyObj.callAttr("doDownload", url,kindstr)
         }).start()
-
-        val validTask:ValidTask = ValidTask(this)
-        validTask.execute()
-
-        while(validTask.status!=AsyncTask.Status.FINISHED){}
-
-        if(!validTask.getValid()){
-            Toast.makeText(this,"Error occurred cannot download.Check URL",Toast.LENGTH_LONG).show()
-            return 
-        }
-
 
         val downloadTask:DownloadTask = DownloadTask(this,progressBar)
         downloadTask.execute()

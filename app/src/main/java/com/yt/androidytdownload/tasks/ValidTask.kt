@@ -24,10 +24,8 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
 
 
         val socket = DatagramSocket(SocketPort.Port.port)
-        var running = true
         var buffer = ByteArray(256)
         var packet = DatagramPacket(buffer, buffer.size)
-
 
         socket.receive(packet)
 
@@ -43,6 +41,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
         }
 
         socket.close()
+
         return true
     }
 
@@ -57,7 +56,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     }
 
     fun getValid():Boolean{
-        return this.valid
+        return true
     }
 
 }

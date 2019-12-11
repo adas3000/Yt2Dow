@@ -56,15 +56,20 @@ class DownloadTask : AsyncTask<String, String, String> {
             packet = DatagramPacket(buffer, buffer.size, addr, port)
             val received: String = String(packet.data, 0, packet.length)
 
-            publishProgress(received)
-
-            if (received.contains("error")){
+            if(received.matches(".*\\d.*".toRegex())){
+                publishProgress(received)
+            }
+            else if (received.contains("error")){
                 socket.close()
                 return received
+            }
+            else if(received.contains("title")){
+                println(received)
             }
             else if (received.contains("100%")) {
                 running = false
             }
+
         }
         socket.close()
 
@@ -73,14 +78,14 @@ class DownloadTask : AsyncTask<String, String, String> {
 
     override fun onProgressUpdate(vararg values: String?) {
         if (values[0] != null) {
-                Log.d("Recived:", values[0])
+                Log.d("Recived:", values[0].toString())
                 progressBar.progress = GetDecFromStr(values[0].toString())
-
         }
     }
 
 
     override fun onPostExecute(result: String?) {
+        println("onpostexecute running")
         if(result != null){
             if(result.contains("success")){
                 Toast.makeText(context, "Downloaded!", Toast.LENGTH_LONG).show()

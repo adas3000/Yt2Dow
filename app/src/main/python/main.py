@@ -8,6 +8,7 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    yt = None
    try:
       yt = YouTube(url,on_progress_callback=progress_function)
+      send.sendPacket('ok:Good url link')
    except:
       print("Error")
       send.sendPacket('error:Non valid youtube url link!')
@@ -24,8 +25,7 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    global title
    file_size = video.filesize
    title = video.title
-   file_size /= 1000000
-   #send.sendPacket(json.dumps({"title":title,"file_size":file_size}))
+   #send.sendPacket(json.dumps({"title":title,"file_size":file_size/1000000}))
 
    video.download(output_path=saveIn)
 

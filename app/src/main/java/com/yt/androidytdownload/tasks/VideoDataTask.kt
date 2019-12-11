@@ -1,7 +1,9 @@
 package com.yt.androidytdownload.tasks
 
 import android.os.AsyncTask
+import android.util.JsonReader
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.util.SocketPort
 import java.net.DatagramPacket
@@ -24,6 +26,7 @@ class VideoDataTask:AsyncTask<Void,Void,Void> {
     override fun doInBackground(vararg p0: Void?): Void {
 
 
+
         val socket = DatagramSocket(SocketPort.Port.port)
         var running = true
         var buffer = ByteArray(256)
@@ -38,8 +41,9 @@ class VideoDataTask:AsyncTask<Void,Void,Void> {
         packet = DatagramPacket(buffer, buffer.size, addr, port)
 
         val received: String = String(packet.data, 0, packet.length)
+        println("RECEIVED"+received)
+        this.videoDetails = GsonBuilder().setLenient().create().fromJson(received,VideoDetails::class.java)
 
-        this.videoDetails = Gson().fromJson(received,VideoDetails::class.java)
 
         socket.close()
 
