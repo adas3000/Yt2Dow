@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         radioGroup.check(radioButton_video.id)
-
+        progressBar2.visibility=View.GONE
 
         if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
             Toast.makeText(this,"GRANTED", LENGTH_LONG).show()
@@ -59,10 +59,10 @@ class MainActivity : AppCompatActivity() {
 
         val python: Python = Python.getInstance()
         val pyObj: PyObject = python.getModule("main")
-        
+
 
         Thread(Runnable {
-             pyObj.callAttr("doDownload",url,kind.toString(),"")
+             pyObj.callAttr("doDownload",url,kind.toString())
         }).start()
 
 

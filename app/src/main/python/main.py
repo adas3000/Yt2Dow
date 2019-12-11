@@ -1,16 +1,39 @@
 from pytube import YouTube
-# if mp4ormp4 true download mp3 else download mp4
 
-def doDownload(url,kind,saveIn) :
+
+
+def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    kind = kind.lower()   
    if not kind=="mp3" or not kind=="mp4":
       pass
       #send error msg
+   yt = YouTube(url,on_progress_callback=progress_function)
+   
 
-   YouTube(url).streams.filter(file_extension="mp3").first().download(output_path='/storage/emulated/0/download')
+   video = yt.streams.filter(progressive=True,file_extension=kind).order_by('resolution').first()
+   global file_size
+   file_size = video.filesize
+   video.download()
    #send title etc. thorught socket 
+
+
+
+
+def progress_function(stream,chunk,file_handle,reamining):
+    percent = (100*(file_size-reamining))/file_size
+    print("{:00.0f}% downloaded".format(percent))
+    #send percent via socket conn
+
+
+
+def percent(bytes,total):
+   perc = (float(bytes)/float(total)) * float(100)
+   return perc
 
 
 def getList(*args):
         return list(args)
 
+
+
+doDownload("https://www.youtube.com/watch?v=pXdY1B-KVJg","mp4") 
