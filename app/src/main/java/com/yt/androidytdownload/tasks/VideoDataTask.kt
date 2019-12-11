@@ -1,6 +1,7 @@
 package com.yt.androidytdownload.tasks
 
 import android.os.AsyncTask
+import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.util.SocketPort
 import java.net.DatagramPacket
@@ -16,6 +17,9 @@ class VideoDataTask:AsyncTask<Void,Void,Void> {
         this.videoDetails = VideoDetails("","")
     }
 
+    public fun getVideoDetails():VideoDetails{
+        return this.videoDetails
+    }
 
     override fun doInBackground(vararg p0: Void?): Void {
 
@@ -35,6 +39,7 @@ class VideoDataTask:AsyncTask<Void,Void,Void> {
 
         val received: String = String(packet.data, 0, packet.length)
 
+        this.videoDetails = Gson().fromJson(received,VideoDetails::class.java)
 
         socket.close()
 
