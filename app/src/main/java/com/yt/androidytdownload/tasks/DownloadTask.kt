@@ -20,7 +20,7 @@ class DownloadTask : AsyncTask<String, String, String> {
 
     private val context: Context
     private val progressBar: ProgressBar
-    private val videoDetails:VideoDetails
+    private var videoDetails:VideoDetails
 
     constructor(context: Context, progressBar: ProgressBar) {
         this.context = context
@@ -44,6 +44,26 @@ class DownloadTask : AsyncTask<String, String, String> {
         var buffer = ByteArray(256)
         var packet: DatagramPacket = DatagramPacket(buffer, buffer.size)
 
+/*
+        while(true){ //get title check url correction etc.
+            socket.receive(packet)
+            val addr: InetAddress = packet.address
+            val port = packet.port
+
+            packet = DatagramPacket(buffer, buffer.size, addr, port)
+            val received: String = String(packet.data, 0, packet.length)
+
+            if (received.contains("error")){
+                socket.close()
+                return received
+            }
+            else if(received.contains("title")){
+                this.videoDetails = Gson().fromJson(received,VideoDetails::class.java)
+                publishProgress("Downloading:Title:"+videoDetails.getTitle()+"|Size:"+videoDetails.getfile_Size())
+                break
+            }
+        }
+*/
         while (running) {
 
             socket.receive(packet)
@@ -54,22 +74,13 @@ class DownloadTask : AsyncTask<String, String, String> {
             packet = DatagramPacket(buffer, buffer.size, addr, port)
             val received: String = String(packet.data, 0, packet.length)
 
+            publishProgress(received)
 
             if (received.contains("error")){
                 socket.close()
                 return received
             }
-            else if(received.contains("title")){
-                println(received)
-
-
-
-                return ""
-            }
-            else
-                publishProgress(received)
-
-            if (received.contains("100%")) {
+            else if (received.contains("100%")) {
                 running = false
             }
         }
@@ -80,8 +91,9 @@ class DownloadTask : AsyncTask<String, String, String> {
 
     override fun onProgressUpdate(vararg values: String?) {
         if (values[0] != null) {
-            Log.d("Recived:", values[0])
-            progressBar.progress = GetDecFromStr(values[0].toString())
+                Log.d("Recived:", values[0])
+                progressBar.progress = GetDecFromStr(values[0].toString())
+
         }
     }
 

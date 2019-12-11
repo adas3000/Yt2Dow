@@ -1,6 +1,7 @@
 package com.yt.androidytdownload
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -65,15 +66,15 @@ class MainActivity : AppCompatActivity() {
 
         val kindstr=kind.toString().toLowerCase()
 
-        val videoDetails:VideoDetails
-
+       // val videoDetails:VideoDetails
 
         val downloadTask:DownloadTask = DownloadTask(this,progressBar)
         downloadTask.execute()
 
 
+
         Thread(Runnable {
-            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=VqEayo28VX8", kindstr)
+            pyObj.callAttr("doDownload", url, kindstr)
         }).start()
 
 

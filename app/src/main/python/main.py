@@ -24,9 +24,9 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    global title
    file_size = video.filesize
    title = video.title
+   file_size /= 1000000
+   #send.sendPacket(json.dumps({"title":title,"file_size":file_size}))
 
-   send.sendPacket(json.dumps({"title":title,"file_size":file_size}))
-   
    video.download(output_path=saveIn)
 
 
