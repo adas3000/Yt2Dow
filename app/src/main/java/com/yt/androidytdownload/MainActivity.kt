@@ -67,35 +67,7 @@ class MainActivity : AppCompatActivity() {
         Thread(Runnable {
             pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=pXdY1B-KVJg"/*url*/, kind.toString())
         }).start()
-
-        /*
-        Thread(Runnable {
-
-            val socket: DatagramSocket = DatagramSocket(5005)
-            var running: Boolean = true
-            var buffer = ByteArray(256)
-            var packet: DatagramPacket = DatagramPacket(buffer, buffer.size)
-
-            while (running) {
-
-
-                socket.receive(packet)
-
-                val addr: InetAddress = packet.address
-                val port = packet.port
-
-                packet = DatagramPacket(buffer, buffer.size, addr, port)
-                val received: String = String(packet.data, 0, packet.length)
-
-                Log.d("Recived:",received)
-                if (received.contains("100%")) {
-                    running = false
-                }
-            }
-            Toast.makeText(this, "Downloaded!", LENGTH_LONG).show()
-
-        }).start()
-        */
+        
 
         val downloadTask:DownloadTask = DownloadTask(this,progressBar2)
 
