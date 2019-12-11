@@ -65,9 +65,9 @@ class MainActivity : AppCompatActivity() {
 
 
         Thread(Runnable {
-            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=pXdY1B-KVJg"/*url*/, kind.toString())
+            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=w1uDMcIXCnY&list=RDw1uDMcIXCnY&start_radio=1", kind.toString())
         }).start()
-        
+
 
         val downloadTask:DownloadTask = DownloadTask(this,progressBar2)
 
