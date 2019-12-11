@@ -1,5 +1,6 @@
 from pytube import YouTube
 import send
+import json
 
 
 def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
@@ -23,6 +24,9 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    global title
    file_size = video.filesize
    title = video.title
+
+   send.sendPacket(json.dumps({"title":title,"file_size":file_size}))
+   
    video.download(output_path=saveIn)
 
 

@@ -1,9 +1,14 @@
 package com.yt.androidytdownload.Model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 class VideoDetails {
 
-    private val title:String
-    private val file_size:String
+    @JsonProperty(value = "title")
+    private var title:String
+
+    @JsonProperty(value = "file_size")
+    private var file_size:String
 
     constructor(title:String,file_size:String){
         this.title = title
@@ -19,6 +24,13 @@ class VideoDetails {
         return this.file_size
     }
 
+    fun setTitle(title:String){
+        this.title = title
+    }
+
+    fun setfile_Size(file_size: String){
+        this.file_size = file_size
+    }
 
 
 

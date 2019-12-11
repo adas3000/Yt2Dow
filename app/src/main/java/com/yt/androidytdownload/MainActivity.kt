@@ -65,13 +65,15 @@ class MainActivity : AppCompatActivity() {
 
         val kindstr=kind.toString().toLowerCase()
 
+        val videoDetails:VideoDetails
+
 
         val downloadTask:DownloadTask = DownloadTask(this,progressBar)
         downloadTask.execute()
 
 
         Thread(Runnable {
-            pyObj.callAttr("doDownload", url, kindstr)
+            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=VqEayo28VX8", kindstr)
         }).start()
 
 

@@ -6,6 +6,10 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.util.GetDecFromStr
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -16,10 +20,16 @@ class DownloadTask : AsyncTask<String, String, String> {
 
     private val context: Context
     private val progressBar: ProgressBar
+    private val videoDetails:VideoDetails
 
     constructor(context: Context, progressBar: ProgressBar) {
         this.context = context
         this.progressBar = progressBar
+        this.videoDetails = VideoDetails("","")
+    }
+
+    fun getVideoDetails():VideoDetails{
+        return this.videoDetails
     }
 
     override fun onPreExecute() {
@@ -49,7 +59,13 @@ class DownloadTask : AsyncTask<String, String, String> {
                 socket.close()
                 return received
             }
+            else if(received.contains("title")){
+                println(received)
 
+
+
+                return ""
+            }
             else
                 publishProgress(received)
 
@@ -71,7 +87,6 @@ class DownloadTask : AsyncTask<String, String, String> {
 
 
     override fun onPostExecute(result: String?) {
-        Log.d("POST","POST EXECUTE EXECUTING")
         if(result != null){
             if(result.contains("success")){
                 Toast.makeText(context, "Downloaded!", Toast.LENGTH_LONG).show()
