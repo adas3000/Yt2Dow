@@ -1,7 +1,5 @@
 from pytube import YouTube
 
 
-yt = YouTube('https://www.youtube.com/watch?v=pXdY1B-KVJg').streams.filter(adaptive=True).first().download()
-
-
+yt = YouTube('https://www.youtube.com/watch?v=9B5OXpt53DY').streams.filter(only_audio=True).first().download()
 print("Finished")

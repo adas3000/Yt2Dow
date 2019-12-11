@@ -11,7 +11,7 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    if kind == 'mp3':
       video = yt.streams.filter(only_audio=True).first()
    else:
-      video = yt.streams.filter(adaptive=True).first()
+      video = yt.streams.first()
 
 
    global file_size
@@ -37,5 +37,3 @@ def getList(*args):
         return list(args)
 
 
-
-#doDownload("https://www.youtube.com/watch?v=pXdY1B-KVJg","mp4") 

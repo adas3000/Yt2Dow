@@ -66,12 +66,12 @@ class MainActivity : AppCompatActivity() {
         val kindstr=kind.toString().toLowerCase()
 
         if(!kindstr.equals("mp3") && !kindstr.equals("mp4")){
-            Toast.makeText(this,"Non valid file input must be mp3 or mp4",Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"Non valid file input must be mp3 or mp4",LENGTH_LONG).show()
             return
         }
 
         Thread(Runnable {
-            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=pXdY1B-KVJg", kindstr)
+            pyObj.callAttr("doDownload", "https://www.youtube.com/watch?v=9B5OXpt53DY", kindstr)
         }).start()
 
 

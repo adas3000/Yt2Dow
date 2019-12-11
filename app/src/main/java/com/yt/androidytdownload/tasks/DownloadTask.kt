@@ -53,6 +53,8 @@ class DownloadTask : AsyncTask<String, String, Void> {
                 running = false
             }
         }
+        socket.close()
+
         return null
     }
 
@@ -67,5 +69,6 @@ class DownloadTask : AsyncTask<String, String, Void> {
     override fun onPostExecute(result: Void?) {
         Toast.makeText(context, "Downloaded!", Toast.LENGTH_LONG).show()
         progressBar.visibility = View.INVISIBLE
+        progressBar.progress=0
     }
 }
