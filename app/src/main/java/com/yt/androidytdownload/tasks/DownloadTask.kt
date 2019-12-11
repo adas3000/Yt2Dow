@@ -11,6 +11,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.util.GetDecFromStr
+import com.yt.androidytdownload.util.SocketPort
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -39,31 +40,12 @@ class DownloadTask : AsyncTask<String, String, String> {
 
     override fun doInBackground(vararg p0: String?): String? {
 
-        val socket: DatagramSocket = DatagramSocket(5005)
+        val socket: DatagramSocket = DatagramSocket(SocketPort.Port.port)
         var running: Boolean = true
         var buffer = ByteArray(256)
         var packet: DatagramPacket = DatagramPacket(buffer, buffer.size)
 
-/*
-        while(true){ //get title check url correction etc.
-            socket.receive(packet)
-            val addr: InetAddress = packet.address
-            val port = packet.port
 
-            packet = DatagramPacket(buffer, buffer.size, addr, port)
-            val received: String = String(packet.data, 0, packet.length)
-
-            if (received.contains("error")){
-                socket.close()
-                return received
-            }
-            else if(received.contains("title")){
-                this.videoDetails = Gson().fromJson(received,VideoDetails::class.java)
-                publishProgress("Downloading:Title:"+videoDetails.getTitle()+"|Size:"+videoDetails.getfile_Size())
-                break
-            }
-        }
-*/
         while (running) {
 
             socket.receive(packet)

@@ -30,6 +30,16 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    video.download(output_path=saveIn)
 
 
+def checkUrl():
+   try:
+      yt = YouTube(url,on_progress_callback=progress_function)
+   except:
+      print("Error")
+      send.sendPacket('error:Incorrect youtube url link!')
+
+
+
+
 def progress_function(stream,chunk,file_handle,reamining):
     percent = (100*(file_size-reamining))/file_size
     value = "{:00.0f}% downloaded".format(percent)

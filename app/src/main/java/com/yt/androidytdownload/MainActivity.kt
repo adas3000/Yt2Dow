@@ -3,6 +3,7 @@ package com.yt.androidytdownload
 import android.Manifest
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
@@ -17,6 +18,7 @@ import com.chaquo.python.Python
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.tasks.DownloadTask
+import com.yt.androidytdownload.tasks.ValidTask
 import kotlinx.android.synthetic.main.activity_main.*
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -66,16 +68,27 @@ class MainActivity : AppCompatActivity() {
 
         val kindstr=kind.toString().toLowerCase()
 
-       // val videoDetails:VideoDetails
+        Thread(Runnable {
+            pyObj.callAttr("doDownload", url, kindstr)
+        }).start()
+
+        val validTask:ValidTask = ValidTask(this)
+        validTask.execute()
+
+        while(validTask.status!=AsyncTask.Status.FINISHED){}
+
+        if(!validTask.getValid()){
+            Toast.makeText(this,"Error occurred cannot download.Check URL",Toast.LENGTH_LONG).show()
+            return 
+        }
+
 
         val downloadTask:DownloadTask = DownloadTask(this,progressBar)
         downloadTask.execute()
 
 
 
-        Thread(Runnable {
-            pyObj.callAttr("doDownload", url, kindstr)
-        }).start()
+
 
 
 
