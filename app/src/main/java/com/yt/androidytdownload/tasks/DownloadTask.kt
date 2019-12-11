@@ -44,9 +44,12 @@ class DownloadTask : AsyncTask<String, String, String> {
             packet = DatagramPacket(buffer, buffer.size, addr, port)
             val received: String = String(packet.data, 0, packet.length)
 
+
             if (received.contains("error")){
+                socket.close()
                 return received
             }
+
             else
                 publishProgress(received)
 

@@ -9,7 +9,7 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
       yt = YouTube(url,on_progress_callback=progress_function)
    except:
       print("Error")
-      send.sendPacket("error:Non valid youtube url link!")
+      send.sendPacket('error:Non valid youtube url link!')
       return 
 
    video = None

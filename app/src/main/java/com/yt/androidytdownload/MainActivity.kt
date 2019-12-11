@@ -66,14 +66,15 @@ class MainActivity : AppCompatActivity() {
         val kindstr=kind.toString().toLowerCase()
 
 
+        val downloadTask:DownloadTask = DownloadTask(this,progressBar)
+        downloadTask.execute()
+
+
         Thread(Runnable {
             pyObj.callAttr("doDownload", url, kindstr)
         }).start()
 
 
-        val downloadTask:DownloadTask = DownloadTask(this,progressBar)
-
-        downloadTask.execute()
 
 
     }
