@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private var kind: Kind = Kind.MP4
+    var hasPermissions = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,8 +29,11 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = View.INVISIBLE
         progressBar_circle.visibility = View.INVISIBLE
 
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
             Toast.makeText(this, "GRANTED", LENGTH_LONG).show()
+            hasPermissions = true
+        }
         else
             Toast.makeText(this, "NOT GRANTED", LENGTH_LONG).show()
 
@@ -56,6 +60,11 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onDownloadClick(view: View) {
+
+        if(!hasPermissions){
+            Toast.makeText(this,"No permission to write in storage.Set permission in settins.",Toast.LENGTH_LONG).show()
+            return
+        }
 
         val url: String = editText.text.toString()
         val kindstr=kind.toString().toLowerCase()
