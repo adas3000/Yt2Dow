@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.AsyncTask
+import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -29,16 +30,19 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     val python: Python
     val pyObj: PyObject
     val downloadTask:DownloadTask
+    val progressBar:ProgressBar
 
     override fun onPreExecute() {
         downloadTask.downloadButton.isClickable = false
+        progressBar.visibility = View.VISIBLE
         Thread(Runnable {
             pyObj.callAttr("getVideoInfo", url, kindstr)
         }).start()
     }
 
-    constructor(context: Context,downloadTask: DownloadTask,python:Python,moduleName:String,url: String, kindstr: String) {
+    constructor(context: Context,downloadTask: DownloadTask,progressBar:ProgressBar,python:Python,moduleName:String,url: String, kindstr: String) {
         this.context = context
+        this.progressBar = progressBar
         this.videoDetails = VideoDetails("", "")
         this.url = url
         this.downloadTask = downloadTask
@@ -82,11 +86,13 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     }
 
     override fun onPostExecute(result: Boolean?) {
+        progressBar.visibility = View.INVISIBLE
+
         if (result != null) {
             if (result) {
 
                 val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
-                alertDialog.setTitle("asdsad")
+                alertDialog.setTitle("Download")
                 alertDialog.setMessage("Are you sure you wanna download below video?\nTitle:" + videoDetails.title + "\nSize(MB):" + videoDetails.file_size)
                     .setCancelable(false)
                     .setPositiveButton("Yes", { dialog, which ->
@@ -98,8 +104,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                     })
                     .setNegativeButton("No",{dialog,which->dialog.cancel();downloadTask.downloadButton.isClickable=true })
                     .create()
-                    .show() //todo if .show() is enable getting error : E/ViewRootImpl: sendUserActionEvent() returned. (body in postivie button was moved there from below)
-
+                    .show()
 
             } else
                 Toast.makeText(

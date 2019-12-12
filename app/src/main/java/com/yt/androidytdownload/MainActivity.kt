@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         radioGroup.check(radioButton_video.id)
         progressBar.visibility = View.INVISIBLE
+        progressBar_circle.visibility = View.INVISIBLE
 
         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             Toast.makeText(this, "GRANTED", LENGTH_LONG).show()
@@ -33,7 +34,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "NOT GRANTED", LENGTH_LONG).show()
 
         editText.setText("https://www.youtube.com/watch?v=SOzuX53ShBM")
-        button_download.isClickable=true
+
+
     }
 
     fun onRadioButtonClick(view: View) {
@@ -60,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
         val downloadTask:DownloadTask = DownloadTask(this,progressBar,button_download)
 
-        val validTask:ValidTask = ValidTask(this,downloadTask, Python.getInstance(),"main",url,kindstr)
+        val validTask:ValidTask = ValidTask(this,downloadTask,progressBar_circle, Python.getInstance(),"main",url,kindstr)
         validTask.execute()
     }
 
