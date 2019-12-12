@@ -1,7 +1,10 @@
 package com.yt.androidytdownload.tasks
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.AsyncTask
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.chaquo.python.PyObject
@@ -26,16 +29,19 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     val kindstr: String
     val python: Python
     val pyObj: PyObject
+    val downloadButton: Button
 
     override fun onPreExecute() {
+        downloadButton.isClickable=false
         Thread(Runnable {
             pyObj.callAttr("getVideoInfo", url, kindstr)
         }).start()
     }
 
-    constructor(context: Context, progressBar: ProgressBar, url: String, kindstr: String) {
+    constructor(context: Context, progressBar: ProgressBar, url: String, kindstr: String,downloadButton:Button) {
         this.context = context
         this.progressBar = progressBar
+        this.downloadButton = downloadButton
         this.videoDetails = VideoDetails("", "")
         this.url = url
         this.kindstr = kindstr
@@ -80,11 +86,23 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     override fun onPostExecute(result: Boolean?) {
         if (result != null) {
             if (result) {
-                Toast.makeText(context,"Downloading starting",Toast.LENGTH_LONG).show()
+
+                var doDownload = false
+                val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
+                alertDialog.setMessage("Are you sure you wanna download below video?\nTitle:" + videoDetails.title + "\nSize(MB):" + videoDetails.file_size)
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", { dialog, which -> doDownload = true })
+                    .setNegativeButton("No",{dialog,which->downloadButton.isClickable = true })
+                    .show()
+
+                if(!doDownload) return
+
+
+                Toast.makeText(context, "Downloading starting", Toast.LENGTH_LONG).show()
                 Thread(Runnable {
                     pyObj.callAttr("doDownload", url, kindstr)
                 }).start()
-                val downloadTask: DownloadTask = DownloadTask(context, progressBar)
+                val downloadTask: DownloadTask = DownloadTask(context, progressBar,downloadButton)
                 downloadTask.execute()
             } else
                 Toast.makeText(

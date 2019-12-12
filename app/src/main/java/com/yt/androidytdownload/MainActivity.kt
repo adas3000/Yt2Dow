@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "NOT GRANTED", LENGTH_LONG).show()
 
         editText.setText("https://www.youtube.com/watch?v=SOzuX53ShBM")
+        button_download.isClickable=true
     }
 
     fun onRadioButtonClick(view: View) {
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         val url: String = editText.text.toString()
         val kindstr=kind.toString().toLowerCase()
 
-        val validTask:ValidTask = ValidTask(this,progressBar,url,kindstr)
+        val validTask:ValidTask = ValidTask(this,progressBar,url,kindstr,button_download)
         validTask.execute()
     }
 

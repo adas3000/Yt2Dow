@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.yt.androidytdownload.enum.SocketResult
@@ -18,10 +19,12 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     private val context: Context
     private val progressBar: ProgressBar
+    private val downloadButton:Button
 
-    constructor(context: Context, progressBar: ProgressBar) {
+    constructor(context: Context, progressBar: ProgressBar,downloadButton:Button) {
         this.context = context
         this.progressBar = progressBar
+        this.downloadButton = downloadButton
     }
 
 
@@ -79,5 +82,6 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
         }
         progressBar.visibility = View.INVISIBLE
         progressBar.progress = 0
+        downloadButton.isClickable = true
     }
 }
