@@ -101,7 +101,6 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                     .show() //todo if .show() is enable getting error : E/ViewRootImpl: sendUserActionEvent() returned. (body in postivie button was moved there from below)
 
 
-
             } else
                 Toast.makeText(
                     context,
