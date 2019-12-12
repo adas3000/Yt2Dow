@@ -85,22 +85,23 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
         if (result != null) {
             if (result) {
 
-                var doDownload = false
                 val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
+                alertDialog.setTitle("asdsad")
                 alertDialog.setMessage("Are you sure you wanna download below video?\nTitle:" + videoDetails.title + "\nSize(MB):" + videoDetails.file_size)
                     .setCancelable(false)
-                    .setPositiveButton("Yes", { dialog, which -> doDownload = true })
+                    .setPositiveButton("Yes", { dialog, which ->
+                        Toast.makeText(context, "Downloading starting", Toast.LENGTH_LONG).show()
+                        Thread(Runnable {
+                            pyObj.callAttr("doDownload", url, kindstr)
+                        }).start()
+                        downloadTask.execute()
+                    })
                     .setNegativeButton("No",{dialog,which->dialog.cancel();downloadTask.downloadButton.isClickable=true })
                     .create()
-                    .show()
+                    .show() //todo if .show() is enable getting error : E/ViewRootImpl: sendUserActionEvent() returned. (body in postivie button was moved there from below)
 
-                if(!doDownload) return
 
-                Toast.makeText(context, "Downloading starting", Toast.LENGTH_LONG).show()
-                Thread(Runnable {
-                    pyObj.callAttr("doDownload", url, kindstr)
-                }).start()
-                downloadTask.execute()
+
             } else
                 Toast.makeText(
                     context,
