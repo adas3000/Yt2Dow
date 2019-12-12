@@ -8,8 +8,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import com.yt.androidytdownload.Model.VideoDetails
+import com.yt.androidytdownload.R
 import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.GetDecFromStr
+import com.yt.androidytdownload.util.MyNotification
 import com.yt.androidytdownload.util.SocketPort
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -19,19 +23,23 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
 
     private val context: Context
-    private val progressBar: ProgressBar
+    var videoDetails:VideoDetails = VideoDetails("","")
+    val notification:MyNotification
     val downloadButton:Button
 
-    constructor(context: Context, progressBar: ProgressBar,downloadButton:Button) {
+    constructor(context: Context, notification: MyNotification,downloadButton:Button) {
         this.context = context
-        this.progressBar = progressBar
+        this.notification = notification
         this.downloadButton = downloadButton
     }
 
 
 
     override fun onPreExecute() {
-        progressBar.visibility = View.VISIBLE
+        notification.setTitle("Downloading")
+        notification.setContentText(videoDetails.title)
+        notification.builder.setProgress(100,0,false)
+        notification.makeNotification()
     }
 
     override fun doInBackground(vararg p0: String?): SocketResult? {
@@ -68,12 +76,17 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
     override fun onProgressUpdate(vararg values: String?) {
         if (values[0] != null) {
             Log.d("Received:", values[0].toString())
-            progressBar.progress = GetDecFromStr(values[0].toString())
+            notification.builder.setProgress(100,GetDecFromStr(values[0].toString()),false)
+            notification.makeNotification()
+            //progressBar.progress = GetDecFromStr(values[0].toString())
         }
     }
 
 
     override fun onPostExecute(result: SocketResult?) {
+
+        notification.setTitle("Download complete").builder.setProgress(0,0,false)
+        notification.makeNotification()
 
         if (result != null) {
             if (result==SocketResult.SUCCESS)
@@ -81,8 +94,6 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
              else
                 Toast.makeText(context, "Error occurred check whether url is valid.", Toast.LENGTH_LONG).show()
         }
-        progressBar.visibility = View.INVISIBLE
-        progressBar.progress = 0
         downloadButton.isClickable = true
     }
 }

@@ -11,25 +11,25 @@ class MyNotification {
 
     companion object{
         var count = 0
+        var notificationManager:NotificationManager? = null
     }
 
 
     val channelId: String
     var builder: NotificationCompat.Builder
-    val notificationManager: NotificationManager
+    var currentId : Int
 
-
-    constructor(channelId: String, channelName: String, context: Context, notificationManager: NotificationManager) {
+    constructor(channelId: String, channelName: String, context: Context) {
         this.channelId = channelId
         this.builder = NotificationCompat.Builder(context, this.channelId)
-        this.notificationManager = notificationManager
+        this.currentId = count++
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             val notificationChannel: NotificationChannel =
                 NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
 
-            notificationManager.createNotificationChannel(notificationChannel)
+            notificationManager?.createNotificationChannel(notificationChannel)
             builder.setChannelId(channelId)
         }
 
@@ -43,8 +43,27 @@ class MyNotification {
 
 
     fun makeNotification() {
-        notificationManager.notify(count++,builder.build())
+        notificationManager?.notify(currentId,builder.build())
     }
 
+    fun setTitle(str:String):MyNotification{
+        builder.setContentTitle(str)
+        return this
+    }
+
+    fun setContentText(str:String):MyNotification{
+        builder.setContentText(str)
+        return this
+    }
+
+    fun setPriority(p:Int):MyNotification{
+        builder.setPriority(p)
+        return this
+    }
+
+    fun setIcon(icon:Int):MyNotification{
+        builder.setSmallIcon(icon)
+        return this
+    }
 
 }

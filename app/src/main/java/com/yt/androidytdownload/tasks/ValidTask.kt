@@ -100,6 +100,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                         Thread(Runnable {
                             pyObj.callAttr("doDownload", url, kindstr)
                         }).start()
+                        downloadTask.videoDetails = videoDetails
                         downloadTask.execute()
                     })
                     .setNegativeButton("No",{dialog,which->dialog.cancel();downloadTask.downloadButton.isClickable=true })
@@ -112,10 +113,11 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                     "Cannot download video check your URL or internet connection",
                     Toast.LENGTH_LONG
                 ).show()
-            downloadTask.downloadButton.isClickable=true
         } else
             Toast.makeText(context, "Error-Result value is null", Toast.LENGTH_LONG).show()
 
+
+        downloadTask.downloadButton.isClickable=true
     }
 
 

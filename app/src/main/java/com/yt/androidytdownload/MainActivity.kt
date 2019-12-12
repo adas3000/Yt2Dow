@@ -48,12 +48,8 @@ class MainActivity : AppCompatActivity() {
 
         editText.setText("https://www.youtube.com/watch?v=SOzuX53ShBM")
 
-
-
-
-
-
-
+        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        MyNotification.notificationManager = notificationManager
     }
 
     fun onRadioButtonClick(view: View) {
@@ -75,10 +71,8 @@ class MainActivity : AppCompatActivity() {
 
     fun onDownloadClick(view: View) {
 
-        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notification:MyNotification = MyNotification("id1","123",this,notificationManager)
-        notification.setNotificationBuilder("title","content",NotificationCompat.PRIORITY_DEFAULT,R.mipmap.ic_launcher)
-            .makeNotification()
+        var notification:MyNotification=MyNotification("com.yt.androidyt.download.channel","androidytdownloads",this)
+        notification.setIcon(R.mipmap.ic_launcher).setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
 
         if (!hasPermissions) {
@@ -90,12 +84,12 @@ class MainActivity : AppCompatActivity() {
         val url: String = editText.text.toString()
         val kindstr = kind.toString().toLowerCase()
 
-        val downloadTask: DownloadTask = DownloadTask(this, progressBar, button_download)
+        val downloadTask: DownloadTask = DownloadTask(this, notification, button_download)
 
         val validTask: ValidTask =
             ValidTask(this, downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr)
         validTask.execute()
-        
+
     }
 
 
