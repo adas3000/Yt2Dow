@@ -19,7 +19,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     private val context: Context
     private val progressBar: ProgressBar
-    private val downloadButton:Button
+    val downloadButton:Button
 
     constructor(context: Context, progressBar: ProgressBar,downloadButton:Button) {
         this.context = context

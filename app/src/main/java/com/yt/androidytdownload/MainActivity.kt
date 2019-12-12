@@ -11,6 +11,7 @@ import android.widget.Toast.LENGTH_LONG
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import com.yt.androidytdownload.enum.Kind
+import com.yt.androidytdownload.tasks.DownloadTask
 import com.yt.androidytdownload.tasks.ValidTask
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -57,7 +58,9 @@ class MainActivity : AppCompatActivity() {
         val url: String = editText.text.toString()
         val kindstr=kind.toString().toLowerCase()
 
-        val validTask:ValidTask = ValidTask(this,progressBar,url,kindstr,button_download)
+        val downloadTask:DownloadTask = DownloadTask(this,progressBar,button_download)
+
+        val validTask:ValidTask = ValidTask(this,downloadTask,url,kindstr)
         validTask.execute()
     }
 

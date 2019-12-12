@@ -24,26 +24,24 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     private val context: Context
 
     var videoDetails: VideoDetails
-    val progressBar: ProgressBar
     val url: String
     val kindstr: String
     val python: Python
     val pyObj: PyObject
-    val downloadButton: Button
+    val downloadTask:DownloadTask
 
     override fun onPreExecute() {
-        downloadButton.isClickable=false
+        downloadTask.downloadButton.isClickable = false
         Thread(Runnable {
             pyObj.callAttr("getVideoInfo", url, kindstr)
         }).start()
     }
 
-    constructor(context: Context, progressBar: ProgressBar, url: String, kindstr: String,downloadButton:Button) {
+    constructor(context: Context,downloadTask: DownloadTask, url: String, kindstr: String) {
         this.context = context
-        this.progressBar = progressBar
-        this.downloadButton = downloadButton
         this.videoDetails = VideoDetails("", "")
         this.url = url
+        this.downloadTask = downloadTask
         this.kindstr = kindstr
         this.python = Python.getInstance()
         this.pyObj = python.getModule("main")
@@ -92,7 +90,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                 alertDialog.setMessage("Are you sure you wanna download below video?\nTitle:" + videoDetails.title + "\nSize(MB):" + videoDetails.file_size)
                     .setCancelable(false)
                     .setPositiveButton("Yes", { dialog, which -> doDownload = true })
-                    .setNegativeButton("No",{dialog,which->downloadButton.isClickable = true })
+                    .setNegativeButton("No",{dialog,which->downloadTask.downloadButton.isClickable=true })
                     .show()
 
                 if(!doDownload) return
@@ -102,7 +100,6 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                 Thread(Runnable {
                     pyObj.callAttr("doDownload", url, kindstr)
                 }).start()
-                val downloadTask: DownloadTask = DownloadTask(context, progressBar,downloadButton)
                 downloadTask.execute()
             } else
                 Toast.makeText(
