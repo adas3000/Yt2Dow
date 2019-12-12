@@ -6,9 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.GetDecFromStr
@@ -59,10 +56,10 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
 
             when {
-                received.matches(".*\\d.*".toRegex()) -> publishProgress(received)
+                received.contains("100%") -> running = false
+                received.matches(".*\\d.*".toRegex()) -> publishProgress(received) //check whether has some decimals
                 received.contains("error") -> { socket.close();return SocketResult.FAILURE }
                 received.contains("title") -> println(received)
-                received.contains("100%") -> running = false
             }
 
 
@@ -74,7 +71,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     override fun onProgressUpdate(vararg values: String?) {
         if (values[0] != null) {
-            Log.d("Recived:", values[0].toString())
+            Log.d("Received:", values[0].toString())
             progressBar.progress = GetDecFromStr(values[0].toString())
         }
     }

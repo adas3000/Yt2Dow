@@ -20,11 +20,14 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    else:
       video = yt.streams.first()
 
-
+   send.sendPacket(json.dumps({"title":video.title,"file_size":video.filesize/1000000}))
    global file_size
    global title
+   global filepath
    file_size = video.filesize
    title = video.title
+   filepath = saveIn+"/"+title
+   print("file path: "+filepath)
    #send.sendPacket(json.dumps({"title":title,"file_size":file_size/1000000}))
 
    video.download(output_path=saveIn)
