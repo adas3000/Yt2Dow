@@ -95,7 +95,6 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
 
                 if(!doDownload) return
 
-
                 Toast.makeText(context, "Downloading starting", Toast.LENGTH_LONG).show()
                 Thread(Runnable {
                     pyObj.callAttr("doDownload", url, kindstr)
