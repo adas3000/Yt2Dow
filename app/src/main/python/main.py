@@ -47,7 +47,7 @@ def getVideoInfo(url,kind,saveIn='/storage/emulated/0/download'):
 
    mb_size = video.filesize/1000000
    mb_size = "%.1f" % mb_size
-   filepath = saveIn+"/"+title
+   filepath = saveIn+"/"+video.title+".mp4"
    print("file path: "+filepath)
 
    send.sendPacket(json.dumps({"title":video.title,"file_size":mb_size,"file_path":filepath}))

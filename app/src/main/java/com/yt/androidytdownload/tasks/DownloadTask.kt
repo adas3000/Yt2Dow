@@ -1,8 +1,12 @@
 package com.yt.androidytdownload.tasks
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.AsyncTask
 import android.util.Log
+import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.Toast
 import com.yt.androidytdownload.Model.VideoDetails
@@ -10,6 +14,7 @@ import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.GetDecFromStr
 import com.yt.androidytdownload.util.MyNotification
 import com.yt.androidytdownload.util.SocketPort
+import java.io.File
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -79,8 +84,22 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     override fun onPostExecute(result: SocketResult?) {
 
-        notification.builder.setContentTitle("Download complete").setContentText("")
+        notification.builder.setContentText("")
             .setProgress(100, 100, true)
+        val file:File = File(videoDetails.file_path)
+        val map:MimeTypeMap = MimeTypeMap.getSingleton()
+        val ext:String = MimeTypeMap.getFileExtensionFromUrl(file.name)
+        var type:String? = map.getMimeTypeFromExtension(ext)
+
+        if(type==null) type = "*/*"
+
+        val intent:Intent = Intent(Intent.ACTION_VIEW)
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val uri:Uri = Uri.fromFile(file)
+
+        intent.setDataAndType(uri,type)
+        val pendingIntent:PendingIntent = PendingIntent.getActivity(context,0,intent,0)
+        notification.builder.setContentIntent(pendingIntent)
         notification.makeNotification()
 
 

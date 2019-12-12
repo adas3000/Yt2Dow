@@ -24,6 +24,9 @@ import com.yt.androidytdownload.tasks.DownloadTask
 import com.yt.androidytdownload.tasks.ValidTask
 import com.yt.androidytdownload.util.MyNotification
 import kotlinx.android.synthetic.main.activity_main.*
+import android.os.StrictMode
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,8 +46,19 @@ class MainActivity : AppCompatActivity() {
         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this, "GRANTED", LENGTH_LONG).show()
             hasPermissions = true
+
         } else
             Toast.makeText(this, "NOT GRANTED", LENGTH_LONG).show()
+
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                val m = StrictMode::class.java.getMethod("disableDeathOnFileUriExposure")
+                m.invoke(null)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
 
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         MyNotification.notificationManager = notificationManager
