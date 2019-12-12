@@ -1,16 +1,11 @@
 package com.yt.androidytdownload.tasks
 
-import android.app.NotificationManager
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
 import com.yt.androidytdownload.Model.VideoDetails
-import com.yt.androidytdownload.R
 import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.GetDecFromStr
 import com.yt.androidytdownload.util.MyNotification
@@ -23,7 +18,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
 
     private val context: Context
-    var videoDetails:VideoDetails = VideoDetails("","")
+    var videoDetails:VideoDetails = VideoDetails("","","")
     val notification:MyNotification
     val downloadButton:Button
 
@@ -37,7 +32,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     override fun onPreExecute() {
         notification.setTitle(videoDetails.title)
-        notification.setContentText(videoDetails.file_size)
+        notification.setContentText("Size(MB):"+videoDetails.file_size)
         notification.builder.setProgress(100,0,false)
         notification.makeNotification()
     }

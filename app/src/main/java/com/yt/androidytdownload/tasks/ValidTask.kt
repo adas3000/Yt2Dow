@@ -43,7 +43,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     constructor(context: Context,downloadTask: DownloadTask,progressBar:ProgressBar,python:Python,moduleName:String,url: String, kindstr: String) {
         this.context = context
         this.progressBar = progressBar
-        this.videoDetails = VideoDetails("", "")
+        this.videoDetails = VideoDetails("", "","")
         this.url = url
         this.downloadTask = downloadTask
         this.kindstr = kindstr

@@ -46,8 +46,6 @@ class MainActivity : AppCompatActivity() {
         } else
             Toast.makeText(this, "NOT GRANTED", LENGTH_LONG).show()
 
-        editText.setText("https://www.youtube.com/watch?v=SOzuX53ShBM")
-
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         MyNotification.notificationManager = notificationManager
     }

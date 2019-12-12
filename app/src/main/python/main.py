@@ -25,12 +25,11 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    global filepath
    file_size = video.filesize
    title = video.title
-   filepath = saveIn+"/"+title
-   print("file path: "+filepath)
+  
 
    video.download(output_path=saveIn)
 
-def getVideoInfo(url,kind):
+def getVideoInfo(url,kind,saveIn='/storage/emulated/0/download'):
    yt = None
    try:
       yt = YouTube(url,on_progress_callback=progress_function)
@@ -48,8 +47,10 @@ def getVideoInfo(url,kind):
 
    mb_size = video.filesize/1000000
    mb_size = "%.1f" % mb_size
+   filepath = saveIn+"/"+title
+   print("file path: "+filepath)
 
-   send.sendPacket(json.dumps({"title":video.title,"file_size":mb_size}))
+   send.sendPacket(json.dumps({"title":video.title,"file_size":mb_size,"file_path":filepath}))
    
 
 
