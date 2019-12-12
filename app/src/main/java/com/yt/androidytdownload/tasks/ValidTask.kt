@@ -90,7 +90,8 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                 alertDialog.setMessage("Are you sure you wanna download below video?\nTitle:" + videoDetails.title + "\nSize(MB):" + videoDetails.file_size)
                     .setCancelable(false)
                     .setPositiveButton("Yes", { dialog, which -> doDownload = true })
-                    .setNegativeButton("No",{dialog,which->downloadTask.downloadButton.isClickable=true })
+                    .setNegativeButton("No",{dialog,which->dialog.cancel();downloadTask.downloadButton.isClickable=true })
+                    .create()
                     .show()
 
                 if(!doDownload) return
