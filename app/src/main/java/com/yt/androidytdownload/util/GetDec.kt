@@ -21,3 +21,23 @@ fun GetDecFromStr(str:String):Int{
     }
     return sBstr.toString().toInt()
 }
+
+fun deleteWhen(from:String,whenFind:Char):String{
+
+    val buffer = StringBuilder()
+
+    var i:Int = 0;
+    while(from.get(i)!=whenFind){
+        buffer.append(from.get(i++))
+    }
+
+
+    return buffer.append(whenFind).toString()
+}
+
+fun strToJson(str:String,clazz: Class<*>){
+
+
+    
+
+}
