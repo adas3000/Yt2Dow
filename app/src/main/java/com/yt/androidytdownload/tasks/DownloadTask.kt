@@ -10,13 +10,14 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.yt.androidytdownload.Model.VideoDetails
+import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.GetDecFromStr
 import com.yt.androidytdownload.util.SocketPort
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-class DownloadTask : AsyncTask<String, String, String> {
+class DownloadTask : AsyncTask<String, String, SocketResult> {
 
 
     private val context: Context
@@ -38,7 +39,7 @@ class DownloadTask : AsyncTask<String, String, String> {
         progressBar.visibility = View.VISIBLE
     }
 
-    override fun doInBackground(vararg p0: String?): String? {
+    override fun doInBackground(vararg p0: String?): SocketResult? {
 
         val socket: DatagramSocket = DatagramSocket(SocketPort.Port.port)
         var running: Boolean = true
@@ -55,13 +56,11 @@ class DownloadTask : AsyncTask<String, String, String> {
 
             packet = DatagramPacket(buffer, buffer.size, addr, port)
             val received: String = String(packet.data, 0, packet.length)
-            
+
 
             when {
                 received.matches(".*\\d.*".toRegex()) -> publishProgress(received)
-                received.contains("error") -> {
-                    socket.close();return received
-                }
+                received.contains("error") -> { socket.close();return SocketResult.FAILURE }
                 received.contains("title") -> println(received)
                 received.contains("100%") -> running = false
             }
@@ -70,7 +69,7 @@ class DownloadTask : AsyncTask<String, String, String> {
         }
         socket.close()
 
-        return "success"
+        return SocketResult.SUCCESS
     }
 
     override fun onProgressUpdate(vararg values: String?) {
@@ -81,17 +80,13 @@ class DownloadTask : AsyncTask<String, String, String> {
     }
 
 
-    override fun onPostExecute(result: String?) {
-        println("onpostexecute running")
+    override fun onPostExecute(result: SocketResult?) {
+
         if (result != null) {
-            if (result.contains("success")) {
+            if (result==SocketResult.SUCCESS)
                 Toast.makeText(context, "Downloaded!", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(
-                    context, "Error occurred check whether url is valid.\nError message:" + result,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+             else
+                Toast.makeText(context, "Error occurred check whether url is valid.", Toast.LENGTH_LONG).show()
         }
         progressBar.visibility = View.INVISIBLE
         progressBar.progress = 0
