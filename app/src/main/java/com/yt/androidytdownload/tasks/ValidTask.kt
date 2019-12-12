@@ -37,14 +37,14 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
         }).start()
     }
 
-    constructor(context: Context,downloadTask: DownloadTask, url: String, kindstr: String) {
+    constructor(context: Context,downloadTask: DownloadTask,python:Python,moduleName:String,url: String, kindstr: String) {
         this.context = context
         this.videoDetails = VideoDetails("", "")
         this.url = url
         this.downloadTask = downloadTask
         this.kindstr = kindstr
-        this.python = Python.getInstance()
-        this.pyObj = python.getModule("main")
+        this.python = python
+        this.pyObj = python.getModule(moduleName)
     }
 
 

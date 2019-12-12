@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         val downloadTask:DownloadTask = DownloadTask(this,progressBar,button_download)
 
-        val validTask:ValidTask = ValidTask(this,downloadTask,url,kindstr)
+        val validTask:ValidTask = ValidTask(this,downloadTask, Python.getInstance(),"main",url,kindstr)
         validTask.execute()
     }
 
