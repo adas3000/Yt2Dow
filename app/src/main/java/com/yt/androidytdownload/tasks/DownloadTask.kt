@@ -59,11 +59,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
                 received.contains("100%") -> running = false
                 received.matches(".*\\d.*".toRegex()) -> publishProgress(received) //check whether has some decimals
                 received.contains("error") -> { socket.close();return SocketResult.FAILURE }
-                received.contains("title") -> {
-                    this.videoDetails = Gson().fromJson(deleteWhen(received,'}'),VideoDetails::class.java)
-                    println(videoDetails.title)
-                    println(videoDetails.file_size)
-                }
+                received.contains("title") -> this.videoDetails = Gson().fromJson(deleteWhen(received,'}'),VideoDetails::class.java)
             }
 
 

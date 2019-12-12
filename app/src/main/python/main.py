@@ -20,7 +20,6 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    else:
       video = yt.streams.first()
 
-   send.sendPacket(json.dumps({"title":video.title,"file_size":video.filesize/1000000}))
    global file_size
    global title
    global filepath
@@ -28,10 +27,26 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
    title = video.title
    filepath = saveIn+"/"+title
    print("file path: "+filepath)
-   #send.sendPacket(json.dumps({"title":title,"file_size":file_size/1000000}))
 
    video.download(output_path=saveIn)
 
+def getVideoInfo(url,kind):
+   yt = None
+   try:
+      yt = YouTube(url,on_progress_callback=progress_function)
+      send.sendPacket('ok:Good url link')
+   except:
+      print("Error")
+      send.sendPacket('error:Non valid youtube url link!')
+      return 
+
+   video = None
+   if kind == 'mp3':
+      video = yt.streams.filter(only_audio=True).first()
+   else:
+      video = yt.streams.first()
+
+   send.sendPacket(json.dumps({"title":video.title,"file_size":video.filesize/1000000}))
    
 
 

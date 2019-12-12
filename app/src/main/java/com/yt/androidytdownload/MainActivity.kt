@@ -71,14 +71,22 @@ class MainActivity : AppCompatActivity() {
         val pyObj: PyObject = python.getModule("main")
 
         val kindstr=kind.toString().toLowerCase()
-
+/*
         Thread(Runnable {
             pyObj.callAttr("doDownload", url,kindstr)
         }).start()
 
         val downloadTask:DownloadTask = DownloadTask(this,progressBar)
         downloadTask.execute()
+*/
 
+        Thread(Runnable{
+            pyObj.callAttr("getVideoInfo",url,kindstr)
+        }).start()
+
+
+        val validTask:ValidTask = ValidTask(this)
+        validTask.execute()
 
 
 
