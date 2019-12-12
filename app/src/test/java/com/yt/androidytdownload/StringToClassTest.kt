@@ -14,8 +14,7 @@ class StringToClassTest {
 
 
         val title = Gson().fromJson(str,VideoDetails::class.java)
-
-        Assert.assertEquals("Android Tutorial (Kotlin) - 16 - Fragment",title.getTitle())
+        Assert.assertEquals("Android Tutorial (Kotlin) - 16 - Fragment",title.title)
 
     }
 

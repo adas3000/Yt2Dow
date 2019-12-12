@@ -37,7 +37,8 @@ fun deleteWhen(from:String,whenFind:Char):String{
 
 fun strToJson(str:String,clazz: Class<*>){
 
+    val fields = clazz.fields
 
-    
+    println(fields.size)
 
 }

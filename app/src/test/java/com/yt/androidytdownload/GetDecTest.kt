@@ -1,7 +1,9 @@
 package com.yt.androidytdownload
 
+import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.util.GetDecFromStr
 import com.yt.androidytdownload.util.deleteWhen
+import com.yt.androidytdownload.util.strToJson
 import org.junit.Test
 import org.junit.Assert.*
 
@@ -22,16 +24,18 @@ class GetDecTest {
 
     @Test
     fun deleteWhenTest(){
-
-
         val string = "{\"title\": \"Konrad \\ud83c\\udd9a Kurian \\ud83c\\udfa4 WBW 2019 Fina\\u0142 (freestyle rap battle)\", \"file_size\": 31.760437}���������������������������������������������������������������������������������������������������������������������������������������������"
-
 
         assertEquals("{\"title\": \"Konrad \\ud83c\\udd9a Kurian \\ud83c\\udfa4 WBW 2019 Fina\\u0142 (freestyle rap battle)\", \"file_size\": 31.760437}",
             deleteWhen(string,'}')
         )
 
+    }
 
+
+    @Test
+    fun check(){
+        strToJson("{\"title\": \"Konrad \\ud83c\\udd9a Kurian \\ud83c\\udfa4 WBW 2019 Fina\\u0142 (freestyle rap battle)\", \"file_size\": 31.760437}",VideoDetails::class.java)
     }
 
 }
