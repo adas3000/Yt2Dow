@@ -112,6 +112,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                     "Cannot download video check your URL or internet connection",
                     Toast.LENGTH_LONG
                 ).show()
+            downloadTask.downloadButton.isClickable=true
         } else
             Toast.makeText(context, "Error-Result value is null", Toast.LENGTH_LONG).show()
 
