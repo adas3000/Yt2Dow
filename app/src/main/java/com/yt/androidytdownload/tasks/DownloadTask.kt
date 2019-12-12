@@ -6,12 +6,9 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
-import com.google.gson.Gson
-import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.GetDecFromStr
 import com.yt.androidytdownload.util.SocketPort
-import com.yt.androidytdownload.util.deleteWhen
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -21,12 +18,10 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     private val context: Context
     private val progressBar: ProgressBar
-    var videoDetails: VideoDetails
 
     constructor(context: Context, progressBar: ProgressBar) {
         this.context = context
         this.progressBar = progressBar
-        this.videoDetails = VideoDetails("", "")
     }
 
 
@@ -57,8 +52,6 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
             when {
                 received.contains("100%") -> running = false
                 received.matches(".*\\d.*".toRegex()) -> publishProgress(received) //check whether has some decimals
-                received.contains("error") -> { socket.close();return SocketResult.FAILURE }
-                received.contains("title") -> this.videoDetails = Gson().fromJson(deleteWhen(received,'}'),VideoDetails::class.java)
             }
 
 

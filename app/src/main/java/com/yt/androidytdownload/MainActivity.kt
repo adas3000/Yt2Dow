@@ -10,9 +10,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
-import com.yt.androidytdownload.enum.CheckStatus
 import com.yt.androidytdownload.enum.Kind
-import com.yt.androidytdownload.tasks.DownloadTask
 import com.yt.androidytdownload.tasks.ValidTask
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -56,18 +54,9 @@ class MainActivity : AppCompatActivity() {
     fun onDownloadClick(view: View) {
 
         val url: String = editText.text.toString()
-
-        val python: Python = Python.getInstance()
-        val pyObj: PyObject = python.getModule("main")
-
         val kindstr=kind.toString().toLowerCase()
 
-        Thread(Runnable{
-            pyObj.callAttr("getVideoInfo",url,kindstr)
-        }).start()
-
-
-        val validTask:ValidTask = ValidTask(this,progressBar)
+        val validTask:ValidTask = ValidTask(this,progressBar,url,kindstr)
         validTask.execute()
     }
 
