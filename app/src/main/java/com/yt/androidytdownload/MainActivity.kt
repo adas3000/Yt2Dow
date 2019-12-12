@@ -51,12 +51,13 @@ class MainActivity : AppCompatActivity() {
         val ii:Intent = Intent(this,MainActivity::class.java)
         val pendingIntent:PendingIntent = PendingIntent.getActivity(this,0,ii,0)
 
-        builder.setContentIntent(pendingIntent)
+        //builder.setContentIntent(pendingIntent)
         builder.setSmallIcon(R.mipmap.ic_launcher)
         builder.setContentTitle("123")
         builder.setContentText("456")
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        
+
+
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 
@@ -69,6 +70,8 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(notificationChannel)
             builder.setChannelId(channel_id)
         }
+
+        builder.setProgress(100,5,false)
 
         notificationManager.notify(0,builder.build())
 
