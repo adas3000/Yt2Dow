@@ -21,15 +21,15 @@ class DownloadTask : AsyncTask<String, String, String> {
 
     private val context: Context
     private val progressBar: ProgressBar
-    private var videoDetails:VideoDetails
+    private var videoDetails: VideoDetails
 
     constructor(context: Context, progressBar: ProgressBar) {
         this.context = context
         this.progressBar = progressBar
-        this.videoDetails = VideoDetails("","")
+        this.videoDetails = VideoDetails("", "")
     }
 
-    fun getVideoDetails():VideoDetails{
+    fun getVideoDetails(): VideoDetails {
         return this.videoDetails
     }
 
@@ -55,20 +55,17 @@ class DownloadTask : AsyncTask<String, String, String> {
 
             packet = DatagramPacket(buffer, buffer.size, addr, port)
             val received: String = String(packet.data, 0, packet.length)
+            
 
-            if(received.matches(".*\\d.*".toRegex())){
-                publishProgress(received)
+            when {
+                received.matches(".*\\d.*".toRegex()) -> publishProgress(received)
+                received.contains("error") -> {
+                    socket.close();return received
+                }
+                received.contains("title") -> println(received)
+                received.contains("100%") -> running = false
             }
-            else if (received.contains("error")){
-                socket.close()
-                return received
-            }
-            else if(received.contains("title")){
-                println(received)
-            }
-            else if (received.contains("100%")) {
-                running = false
-            }
+
 
         }
         socket.close()
@@ -78,24 +75,25 @@ class DownloadTask : AsyncTask<String, String, String> {
 
     override fun onProgressUpdate(vararg values: String?) {
         if (values[0] != null) {
-                Log.d("Recived:", values[0].toString())
-                progressBar.progress = GetDecFromStr(values[0].toString())
+            Log.d("Recived:", values[0].toString())
+            progressBar.progress = GetDecFromStr(values[0].toString())
         }
     }
 
 
     override fun onPostExecute(result: String?) {
         println("onpostexecute running")
-        if(result != null){
-            if(result.contains("success")){
+        if (result != null) {
+            if (result.contains("success")) {
                 Toast.makeText(context, "Downloaded!", Toast.LENGTH_LONG).show()
-            }
-            else {
-                Toast.makeText(context,"Error occurred check whether url is valid.\nError message:"+result,
-                    Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    context, "Error occurred check whether url is valid.\nError message:" + result,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
         progressBar.visibility = View.INVISIBLE
-        progressBar.progress=0
+        progressBar.progress = 0
     }
 }
