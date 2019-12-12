@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import android.widget.Toast
 import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
+import com.yt.androidytdownload.enum.CheckStatus
 import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.SocketPort
 import com.yt.androidytdownload.util.deleteWhen
@@ -19,10 +20,12 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
 
     var valid:Boolean
     var videoDetails:VideoDetails
+    var status:CheckStatus
 
     constructor(context: Context){
         this.context = context
         this.valid = true
+        this.status = CheckStatus.Checking
         this.videoDetails = VideoDetails("", "")
     }
 
@@ -46,11 +49,11 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
             packet = DatagramPacket(buffer, buffer.size, addr, port)
             val received: String = String(packet.data, 0, packet.length)
 
-            println(received)
             when {
-                received.contains("error") -> {result = false ; running = false}
+                received.contains("error") -> {result = false ; running = false ; status = CheckStatus.Error}
                 received.contains("title") -> {this.videoDetails = Gson().fromJson(deleteWhen(received,'}'),
                     VideoDetails::class.java)
+                    status = CheckStatus.Ok
                     running = false
                 }
             }

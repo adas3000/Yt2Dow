@@ -1,30 +1,20 @@
 package com.yt.androidytdownload
 
 import android.Manifest
-import android.content.DialogInterface
 import android.content.pm.PackageManager
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.RadioButton
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
-import com.yt.androidytdownload.Model.VideoDetails
+import com.yt.androidytdownload.enum.CheckStatus
 import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.tasks.DownloadTask
 import com.yt.androidytdownload.tasks.ValidTask
-import com.yt.androidytdownload.tasks.VideoDataTask
 import kotlinx.android.synthetic.main.activity_main.*
-import java.net.DatagramPacket
-import java.net.DatagramSocket
-import java.net.InetAddress
-import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -71,14 +61,6 @@ class MainActivity : AppCompatActivity() {
         val pyObj: PyObject = python.getModule("main")
 
         val kindstr=kind.toString().toLowerCase()
-/*
-        Thread(Runnable {
-            pyObj.callAttr("doDownload", url,kindstr)
-        }).start()
-
-        val downloadTask:DownloadTask = DownloadTask(this,progressBar)
-        downloadTask.execute()
-*/
 
         Thread(Runnable{
             pyObj.callAttr("getVideoInfo",url,kindstr)
@@ -88,8 +70,19 @@ class MainActivity : AppCompatActivity() {
         val validTask:ValidTask = ValidTask(this)
         validTask.execute()
 
+        while(validTask.status==CheckStatus.Checking){}
 
 
+        if(validTask.status==CheckStatus.Ok){
+            Thread(Runnable {
+                pyObj.callAttr("doDownload", url,kindstr)
+            }).start()
+
+            val downloadTask:DownloadTask = DownloadTask(this,progressBar)
+            downloadTask.execute()
+        }
+        else
+            Toast.makeText(this,"Cannot download file check url correction", LENGTH_LONG).show()
 
 
 
