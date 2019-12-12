@@ -67,26 +67,9 @@ class MainActivity : AppCompatActivity() {
         }).start()
 
 
-        val validTask:ValidTask = ValidTask(this)
+        val validTask:ValidTask = ValidTask(this,progressBar)
         validTask.execute()
-
-        while(validTask.status==CheckStatus.Checking){}
-
-
-        if(validTask.status==CheckStatus.Ok){
-            Thread(Runnable {
-                pyObj.callAttr("doDownload", url,kindstr)
-            }).start()
-
-            val downloadTask:DownloadTask = DownloadTask(this,progressBar)
-            downloadTask.execute()
-        }
-        else
-            Toast.makeText(this,"Cannot download file check url correction", LENGTH_LONG).show()
-
-
-
-
     }
+
 
 }

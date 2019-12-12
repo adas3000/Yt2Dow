@@ -32,7 +32,6 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
 
     override fun onPreExecute() {
-        super.onPreExecute()
         progressBar.visibility = View.VISIBLE
     }
 

@@ -2,11 +2,11 @@ package com.yt.androidytdownload.tasks
 
 import android.content.Context
 import android.os.AsyncTask
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.CheckStatus
-import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.SocketPort
 import com.yt.androidytdownload.util.deleteWhen
 import java.net.DatagramPacket
@@ -18,13 +18,20 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
 
     private val context:Context
 
-    var valid:Boolean
     var videoDetails:VideoDetails
     var status:CheckStatus
+    val progressBar:ProgressBar
 
-    constructor(context: Context){
+
+    override fun onPreExecute() {
+
+        
+
+    }
+
+    constructor(context: Context,progressBar: ProgressBar){
         this.context = context
-        this.valid = true
+        this.progressBar = progressBar
         this.status = CheckStatus.Checking
         this.videoDetails = VideoDetails("", "")
     }
@@ -65,8 +72,13 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
 
     override fun onPostExecute(result: Boolean?) {
         if(result!=null){
-            println("Video details:"+videoDetails.title)
-            this.valid = result
+            if(result){
+
+
+
+            }
+            else
+                Toast.makeText(context,"Cannot download video check your URL or internet connection",Toast.LENGTH_LONG).show()
         }
         else
             Toast.makeText(context,"Error-Result value is null",Toast.LENGTH_LONG).show()
