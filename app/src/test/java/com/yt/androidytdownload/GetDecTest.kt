@@ -1,9 +1,11 @@
 package com.yt.androidytdownload
 
+import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.util.GetDecFromStr
 import com.yt.androidytdownload.util.deleteWhen
 import com.yt.androidytdownload.util.strToJson
+import org.junit.Assert
 import org.junit.Test
 import org.junit.Assert.*
 
@@ -30,6 +32,7 @@ class GetDecTest {
             deleteWhen(string,'}')
         )
 
+        val title = Gson().fromJson(deleteWhen(string,'}'),VideoDetails::class.java)
     }
 
 
