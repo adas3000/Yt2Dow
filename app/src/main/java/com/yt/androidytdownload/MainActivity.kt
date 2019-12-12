@@ -22,6 +22,7 @@ import com.chaquo.python.Python
 import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.tasks.DownloadTask
 import com.yt.androidytdownload.tasks.ValidTask
+import com.yt.androidytdownload.util.MyNotification
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -47,33 +48,10 @@ class MainActivity : AppCompatActivity() {
 
         editText.setText("https://www.youtube.com/watch?v=SOzuX53ShBM")
 
-        val builder:NotificationCompat.Builder = NotificationCompat.Builder(this,"notify_001")
-        val ii:Intent = Intent(this,MainActivity::class.java)
-        val pendingIntent:PendingIntent = PendingIntent.getActivity(this,0,ii,0)
-
-        //builder.setContentIntent(pendingIntent)
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-        builder.setContentTitle("123")
-        builder.setContentText("456")
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
 
-        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val channel_id = "channel_id"
-
-            val notificationChannel:NotificationChannel = NotificationChannel(channel_id,"Channel cos tam",
-                NotificationManager.IMPORTANCE_DEFAULT)
-
-            notificationManager.createNotificationChannel(notificationChannel)
-            builder.setChannelId(channel_id)
-        }
-
-        builder.setProgress(100,5,false)
-
-        notificationManager.notify(0,builder.build())
 
 
     }
@@ -97,6 +75,12 @@ class MainActivity : AppCompatActivity() {
 
     fun onDownloadClick(view: View) {
 
+        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notification:MyNotification = MyNotification("id1","123",this,notificationManager)
+        notification.setNotificationBuilder("title","content",NotificationCompat.PRIORITY_DEFAULT,R.mipmap.ic_launcher)
+            .makeNotification()
+
+
         if (!hasPermissions) {
             Toast.makeText(this, "No permission to write in storage.Set permission in settins.", Toast.LENGTH_LONG)
                 .show()
@@ -111,6 +95,7 @@ class MainActivity : AppCompatActivity() {
         val validTask: ValidTask =
             ValidTask(this, downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr)
         validTask.execute()
+        
     }
 
 
