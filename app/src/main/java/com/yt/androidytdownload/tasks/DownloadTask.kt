@@ -36,8 +36,8 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
 
     override fun onPreExecute() {
-        notification.setTitle("Downloading")
-        notification.setContentText(videoDetails.title)
+        notification.setTitle(videoDetails.title)
+        notification.setContentText(videoDetails.file_size)
         notification.builder.setProgress(100,0,false)
         notification.makeNotification()
     }
@@ -62,7 +62,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
 
             when {
-                received.contains("100%") -> running = false
+                received.contains("100%") -> {publishProgress(received);running = false}
                 received.matches(".*\\d.*".toRegex()) -> publishProgress(received) //check whether has some decimals
             }
 
@@ -78,15 +78,17 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
             Log.d("Received:", values[0].toString())
             notification.builder.setProgress(100,GetDecFromStr(values[0].toString()),false)
             notification.makeNotification()
-            //progressBar.progress = GetDecFromStr(values[0].toString())
         }
     }
 
 
     override fun onPostExecute(result: SocketResult?) {
 
-        notification.setTitle("Download complete").builder.setProgress(0,0,false)
+        notification.builder.setContentTitle("Download complete").setContentText("")
+            .setProgress(100, 100, true)
         notification.makeNotification()
+
+
 
         if (result != null) {
             if (result==SocketResult.SUCCESS)
