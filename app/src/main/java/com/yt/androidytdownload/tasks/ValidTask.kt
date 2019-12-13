@@ -96,7 +96,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                 alertDialog.setMessage("Are you sure you wanna download below video?\nTitle:" + videoDetails.title + "\nSize(MB):" + videoDetails.file_size)
                     .setCancelable(false)
                     .setPositiveButton("Yes", { dialog, which ->
-                        Toast.makeText(context, "Downloading starting", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Download "+videoDetails.title+" started", Toast.LENGTH_LONG).show()
                         Thread(Runnable {
                             pyObj.callAttr("doDownload", url, kindstr)
                         }).start()

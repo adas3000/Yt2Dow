@@ -22,7 +22,6 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
 
    global file_size
    global title
-   global filepath
    file_size = video.filesize
    title = video.title
   
