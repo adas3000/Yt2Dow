@@ -1,8 +1,14 @@
 package com.yt.androidytdownload.util
 
+import android.app.PendingIntent
+import android.content.Intent
+import android.net.Uri
+import android.webkit.MimeTypeMap
+import android.widget.Toast
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
+import java.io.File
 import java.lang.StringBuilder
 
 fun GetDecFromStr(str:String):Int{
@@ -67,6 +73,8 @@ fun parseFFMpegOnProgressStr(str:String):Int{
 fun startConvertion(param:String,from:String,to:String,notification: MyNotification){
 
     val fMpeg: FFmpeg = FFmpeg.getInstance(ContextKeeper.context)
+
+
     val cmd = arrayOf(param,from,to)
     notification.setContentText("Converting...")
     notification.makeNotification()
@@ -78,11 +86,40 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
             override fun onSuccess(message: String?) {
                 println("success")
+                notification.setContentText("Downloaded")
                 notification.builder.setProgress(0,0,false)
+
+                val file_ToRemove:File = File(from)
+
+                if(!file_ToRemove.delete())
+                    println("cannot remove old file")
+
+                val file:File = File(to)
+                val map:MimeTypeMap = MimeTypeMap.getSingleton()
+
+
+                val ext:String = MimeTypeMap.getFileExtensionFromUrl(file.name)
+                var type:String? = map.getMimeTypeFromExtension(ext)
+
+                if(type==null) type ="*/*"
+
+                val intent:Intent = Intent(Intent.ACTION_VIEW)
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+                val uri:Uri = Uri.fromFile(file)
+
+                intent.setDataAndType(uri,type)
+                val pendingIntent:PendingIntent = PendingIntent.getActivity(ContextKeeper.context,0,intent,0)
+
+
+                notification.builder.setContentIntent(pendingIntent)
                 notification.makeNotification()
             }
 
             override fun onFailure(message: String?) {
+                Toast.makeText(ContextKeeper.context,"Converting failure",Toast.LENGTH_LONG).show()
+                notification.setContentText("Downloaded")
+                notification.builder.setProgress(0,0,false)
                 println("failure")
             }
 

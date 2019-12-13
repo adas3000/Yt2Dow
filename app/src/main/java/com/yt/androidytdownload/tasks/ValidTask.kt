@@ -52,7 +52,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
 
         val socket: DatagramSocket = DatagramSocket(SocketPort.Port.port)
         var running: Boolean = true
-        var buffer = ByteArray(256)
+        var buffer = ByteArray(1024)
         var packet: DatagramPacket = DatagramPacket(buffer, buffer.size)
 
         var result = true
