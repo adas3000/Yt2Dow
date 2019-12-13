@@ -25,7 +25,9 @@ import com.yt.androidytdownload.tasks.ValidTask
 import com.yt.androidytdownload.util.MyNotification
 import kotlinx.android.synthetic.main.activity_main.*
 import android.os.StrictMode
-
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg
+import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
 
 
 class MainActivity : AppCompatActivity() {
@@ -57,8 +59,33 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         }
+
+        val fFmpeg:FFmpeg = FFmpeg.getInstance(this)
+        try{
+            fFmpeg.loadBinary(object : LoadBinaryResponseHandler() {
+                override fun onFinish() {
+                    super.onFinish()
+                }
+
+                override fun onSuccess() {
+                    super.onSuccess()
+                }
+
+                override fun onFailure() {
+                    super.onFailure()
+                }
+
+                override fun onStart() {
+                    super.onStart()
+                }
+            })
+        }
+        catch(e:FFmpegNotSupportedException){
+            Toast.makeText(this,"FFmpeg not supported only audio files will be saved as .mp4 files", LENGTH_LONG).show()
+        }
+
+
 
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         MyNotification.notificationManager = notificationManager
