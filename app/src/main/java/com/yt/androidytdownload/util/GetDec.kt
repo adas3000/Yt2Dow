@@ -78,12 +78,15 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
     val cmd = arrayOf(param,from_2,to)
 
+    notification.builder.setProgress(100,100,true)
     notification.setContentText("Converting...")
     notification.makeNotification()
     try{
 
         fMpeg.execute(cmd,object: ExecuteBinaryResponseHandler(){
             override fun onFinish() {
+                notification.builder.setProgress(0,0,false)
+                notification.makeNotification()
             }
 
             override fun onSuccess(message: String?) {
@@ -128,10 +131,6 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
             override fun onProgress(message: String?) {
                 println("progress:"+message)
-            }
-
-            override fun onStart() {
-                super.onStart()
             }
         })
 

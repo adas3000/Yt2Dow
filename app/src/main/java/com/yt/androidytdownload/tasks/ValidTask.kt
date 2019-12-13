@@ -98,13 +98,15 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                     .setCancelable(false)
                     .setPositiveButton("Yes", { dialog, which ->
 
-
-                        AlertDialog.Builder(ContextKeeper.context).setTitle("Convert")
+                        AlertDialog.Builder(ContextKeeper.context).setTitle("MP3")
                             .setMessage("Would you like to convert file to mp3?")
                             .setCancelable(false)
                             .setPositiveButton("Yes", { dialog, which -> downloadTask.convertToMp3 = true;startDownload() })
                             .setNegativeButton("No", { dialog, which -> startDownload()})
+                            .create()
+                            .show()
                     })
+
                     .setNegativeButton("No",
                         { dialog, which -> dialog.cancel();downloadTask.downloadButton.isClickable = true })
                     .create()
