@@ -9,7 +9,7 @@ import com.yt.androidytdownload.util.ContextKeeper
 import com.yt.androidytdownload.util.MyNotification
 import com.yt.androidytdownload.util.parseFFMpegOnProgressStr
 
-class Mp4ToMp3Task : AsyncTask<String,String,Void> {
+class Mp4ToMp3Task : AsyncTask<String,String,Boolean> {
 
     var videoDetails:VideoDetails
     val notification:MyNotification
@@ -20,7 +20,7 @@ class Mp4ToMp3Task : AsyncTask<String,String,Void> {
         this.videoDetails = videoDetails
         this.notification = notification
         this.multipleBy = multipleBy
-        this.maxValue = videoDetails.file_size.toInt()*multipleBy
+        this.maxValue = (videoDetails.file_size.toFloat()*multipleBy).toInt()
     }
 
 
@@ -31,7 +31,7 @@ class Mp4ToMp3Task : AsyncTask<String,String,Void> {
     }
 
 
-    override fun doInBackground(vararg p0: String?): Void {
+    override fun doInBackground(vararg p0: String?): Boolean {
 
         val cmd:List<String> = listOf(p0[0].toString(),p0[1].toString(),p0[2].toString())
 
@@ -41,19 +41,19 @@ class Mp4ToMp3Task : AsyncTask<String,String,Void> {
 
             fMpeg.execute(cmd.toTypedArray(),object:ExecuteBinaryResponseHandler(){
                 override fun onFinish() {
-                    super.onFinish()
                 }
 
                 override fun onSuccess(message: String?) {
-                    super.onSuccess(message)
+                    println("success")
                 }
 
                 override fun onFailure(message: String?) {
-                    super.onFailure(message)
+                    println("failure")
                 }
 
                 override fun onProgress(message: String?) {
-                    super.onProgress(message)
+                    println(message)
+                    publishProgress(message)
                 }
 
                 override fun onStart() {
@@ -67,7 +67,7 @@ class Mp4ToMp3Task : AsyncTask<String,String,Void> {
         }
 
 
-        return Void.TYPE.newInstance()
+        return true
     }
 
     override fun onProgressUpdate(vararg values: String?) {
@@ -75,15 +75,15 @@ class Mp4ToMp3Task : AsyncTask<String,String,Void> {
         var value = values[0]
 
         if(value!=null){
-            println(value)
-            notification.builder.setProgress(maxValue, parseFFMpegOnProgressStr(value),false)
+            //notification.builder.setProgress(maxValue, parseFFMpegOnProgressStr(value),false)
+            notification.builder.setProgress(100,100,true)
             notification.makeNotification()
         }
 
 
     }
 
-    override fun onPostExecute(result: Void?) {
+    override fun onPostExecute(result: Boolean?) {
 
 
 

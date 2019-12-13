@@ -98,6 +98,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         val url: String = editText.text.toString()
+
+        var convert = true
+
+        if(kind==Kind.MP4)
+            convert = false
+
         val kindstr = kind.toString().toLowerCase()
 
         val downloadTask: DownloadTask = DownloadTask( notification, button_download)

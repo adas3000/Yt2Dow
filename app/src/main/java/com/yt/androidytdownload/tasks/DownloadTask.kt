@@ -10,10 +10,7 @@ import android.widget.Button
 import android.widget.Toast
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.SocketResult
-import com.yt.androidytdownload.util.ContextKeeper
-import com.yt.androidytdownload.util.GetDecFromStr
-import com.yt.androidytdownload.util.MyNotification
-import com.yt.androidytdownload.util.SocketPort
+import com.yt.androidytdownload.util.*
 import java.io.File
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -86,13 +83,23 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
             .setProgress(100, 100, true)
 
 
+      //  val convertTask:Mp4ToMp3Task = Mp4ToMp3Task(videoDetails,notification,1000)
 
+
+
+        startConvertion("-i",videoDetails.file_path,videoDetails.file_path.replace(".mp4",".mp3"))
+
+
+
+       // convertTask.execute("-i",videoDetails.file_path,saveIn)
+
+/*
         val file:File = File(videoDetails.file_path)
         val map:MimeTypeMap = MimeTypeMap.getSingleton()
         val ext:String = MimeTypeMap.getFileExtensionFromUrl(file.name)
         var type:String? = map.getMimeTypeFromExtension(ext)
 
-        if(type==null) type = "*/*"
+        if(type==null) type =/* "*/*"
 
         val intent:Intent = Intent(Intent.ACTION_VIEW)
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -102,12 +109,11 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
         val pendingIntent:PendingIntent = PendingIntent.getActivity(ContextKeeper.context,0,intent,0)
         notification.builder.setContentIntent(pendingIntent)
         notification.makeNotification()
+*/
 
-
-        if (result != null) {
-             if(result!=SocketResult.SUCCESS)
+        if (result != null && result!=SocketResult.SUCCESS)
                 Toast.makeText(ContextKeeper.context, "Error occurred check whether url is valid.", Toast.LENGTH_LONG).show()
-        }
+
         downloadButton.isClickable = true
     }
 }
