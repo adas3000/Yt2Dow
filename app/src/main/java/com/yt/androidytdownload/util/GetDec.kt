@@ -42,3 +42,21 @@ fun strToJson(str:String,clazz: Class<*>){
     println(fields.size)
 
 }
+
+fun parseFFMpegOnProgressStr(str:String):Int{
+
+    val builder:StringBuilder = StringBuilder()
+
+    var founded = false
+    for(i in 0 until str.length){
+        if(str[i].isDigit() && !founded){
+            founded = true
+            builder.append(str[i])
+        }
+        else if(str[i].isDigit() && founded)
+            builder.append(str[i])
+        else if(!str[i].isDigit() && founded)
+            break
+    }
+    return builder.toString().toInt()
+}

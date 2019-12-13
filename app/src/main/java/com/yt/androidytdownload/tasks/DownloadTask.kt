@@ -85,6 +85,9 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
         notification.builder.setContentText("")
             .setProgress(100, 100, true)
+
+
+
         val file:File = File(videoDetails.file_path)
         val map:MimeTypeMap = MimeTypeMap.getSingleton()
         val ext:String = MimeTypeMap.getFileExtensionFromUrl(file.name)
@@ -102,11 +105,8 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
         notification.makeNotification()
 
 
-
         if (result != null) {
-            if (result==SocketResult.SUCCESS)
-                Toast.makeText(ContextKeeper.context, "Downloaded!", Toast.LENGTH_LONG).show()
-             else
+             if(result!=SocketResult.SUCCESS)
                 Toast.makeText(ContextKeeper.context, "Error occurred check whether url is valid.", Toast.LENGTH_LONG).show()
         }
         downloadButton.isClickable = true

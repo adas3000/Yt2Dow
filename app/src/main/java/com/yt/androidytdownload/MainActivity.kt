@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         loadFFmpeg()
-        
+
 
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         MyNotification.notificationManager = notificationManager

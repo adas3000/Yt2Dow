@@ -1,18 +1,14 @@
 package com.yt.androidytdownload.tasks
 
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.os.AsyncTask
 import android.view.View
-import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
-import com.yt.androidytdownload.enum.CheckStatus
 import com.yt.androidytdownload.util.ContextKeeper
 import com.yt.androidytdownload.util.SocketPort
 import com.yt.androidytdownload.util.deleteWhen
