@@ -3,7 +3,7 @@ import send
 import json
 
 
-def doDownload(url,kind,port,saveIn='/storage/emulated/0/download') :
+def doDownload(url,kind,port,filename='',saveIn='/storage/emulated/0/download') :
 
    yt = None
    try:
@@ -30,7 +30,7 @@ def doDownload(url,kind,port,saveIn='/storage/emulated/0/download') :
    title = video.title
   
 
-   video.download(output_path=saveIn)
+   video.download(output_path=saveIn,filename=filename)
 
 def getVideoInfo(url,kind,port,saveIn='/storage/emulated/0/download'):
    yt = None
@@ -67,3 +67,6 @@ def progress_function(stream,chunk,file_handle,reamining):
 def percent(bytes,total):
    perc = (float(bytes)/float(total)) * float(100)
    return perc
+
+
+doDownload('https://www.youtube.com/watch?v=v3zzEN-IAUc','mp4',5005,saveIn='')

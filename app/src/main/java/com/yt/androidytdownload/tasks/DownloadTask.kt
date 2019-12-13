@@ -80,7 +80,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     override fun onProgressUpdate(vararg values: String?) {
         if (values[0] != null) {
-            Log.d("Received:", values[0].toString())
+           //Log.d("Received:", values[0].toString())
 
             val currentValue: Int = GetDecFromStr(values[0].toString())
 

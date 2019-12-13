@@ -10,6 +10,7 @@ import com.chaquo.python.Python
 import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.util.ContextKeeper
+import com.yt.androidytdownload.util.cutChars
 import com.yt.androidytdownload.util.deleteWhen
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -74,6 +75,8 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
             packet = DatagramPacket(buffer, buffer.size, addr, port)
             val received: String = String(packet.data, 0, packet.length)
 
+            println("ValidTask message:"+received)
+
             when {
                 received.contains("error") -> {
                     result = false; running = false; }
@@ -130,9 +133,10 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     }
 
     private fun startDownload() {
+        videoDetails.title = cutChars(videoDetails.title)
         Toast.makeText(ContextKeeper.context, "Download " + videoDetails.title + " started", Toast.LENGTH_LONG).show()
         Thread(Runnable {
-            pyObj.callAttr("doDownload", url, kindstr,port)
+            pyObj.callAttr("doDownload", url, kindstr,port, videoDetails.title)
         }).start()
         downloadTask.videoDetails = videoDetails
         downloadTask.execute()

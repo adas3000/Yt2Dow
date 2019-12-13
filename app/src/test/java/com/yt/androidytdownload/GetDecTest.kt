@@ -2,10 +2,7 @@ package com.yt.androidytdownload
 
 import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
-import com.yt.androidytdownload.util.GetDecFromStr
-import com.yt.androidytdownload.util.deleteWhen
-import com.yt.androidytdownload.util.parseFFMpegOnProgressStr
-import com.yt.androidytdownload.util.strToJson
+import com.yt.androidytdownload.util.*
 import org.junit.Assert
 import org.junit.Test
 import org.junit.Assert.*
@@ -58,6 +55,11 @@ class GetDecTest {
         assertEquals(2323, parseFFMpegOnProgressStr(str2))
         assertEquals(10, parseFFMpegOnProgressStr(str3))
 
+    }
+
+    @Test
+    fun ifEqualsThenOk(){
+        assertEquals("Lucky Luke  LYD Like You Do  Future House", cutChars("Lucky Luke - LYD (Like You Do) || Future House"))
     }
 
 

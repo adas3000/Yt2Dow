@@ -70,13 +70,28 @@ fun parseFFMpegOnProgressStr(str:String):Int{
     return builder.toString().toInt()
 }
 
+fun cutChars(str: String):String{
+
+    var answer = str
+    println(answer)
+    answer = answer.replace("[^A-Za-z0-9 ]", "")
+    println(answer)
+    val re = Regex("[^A-Za-z0-9 ]")
+    answer = re.replace(answer, "")
+    return answer
+}
+
 fun startConvertion(param:String,from:String,to:String,notification: MyNotification){
 
     val fMpeg: FFmpeg = FFmpeg.getInstance(ContextKeeper.context)
 
-    val from_2 = from.replace(";","").replace("|","")
+    val from_2 = from.replace(";","").replace("|","").replace("/","")
+
+
 
     val cmd = arrayOf(param,from_2,to)
+
+    val file_title = notification.title
 
     notification.builder.setProgress(100,100,true)
     notification.setTitle("Converting:"+notification.title)
@@ -123,6 +138,7 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
             }
 
             override fun onFailure(message: String?) {
+                Toast.makeText(ContextKeeper.context,"Couldn't convert file:"+file_title,Toast.LENGTH_LONG).show()
                 notification.setContentText("Downloaded")
                 notification.builder.setProgress(0,0,false)
                 val file:File = File(from_2)
@@ -158,6 +174,7 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
     catch(e: FFmpegCommandAlreadyRunningException){
         println("FFmpegCommandAlreadyRunningException:"+e.message)
     }
+
 
 
 
