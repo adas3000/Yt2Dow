@@ -87,7 +87,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
 
 
-        startConvertion("-i",videoDetails.file_path,videoDetails.file_path.replace(".mp4",".mp3"))
+        startConvertion("-i",videoDetails.file_path,videoDetails.file_path.replace(".mp4",".mp3"),notification)
 
 
 

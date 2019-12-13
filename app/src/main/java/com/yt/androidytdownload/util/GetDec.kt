@@ -68,7 +68,8 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
     val fMpeg: FFmpeg = FFmpeg.getInstance(ContextKeeper.context)
     val cmd = arrayOf(param,from,to)
-
+    notification.setContentText("Converting...")
+    notification.makeNotification()
     try{
 
         fMpeg.execute(cmd,object: ExecuteBinaryResponseHandler(){
@@ -77,6 +78,8 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
             override fun onSuccess(message: String?) {
                 println("success")
+                notification.builder.setProgress(0,0,false)
+                notification.makeNotification()
             }
 
             override fun onFailure(message: String?) {
