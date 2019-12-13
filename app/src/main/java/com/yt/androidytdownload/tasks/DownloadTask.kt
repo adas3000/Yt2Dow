@@ -78,33 +78,10 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
             .setProgress(100, 100, true)
 
 
-      //  val convertTask:Mp4ToMp3Task = Mp4ToMp3Task(videoDetails,notification,1000)
-
-
 
         startConvertion("-i",videoDetails.file_path,videoDetails.file_path.replace(".mp4",".mp3"),notification)
 
 
-
-       // convertTask.execute("-i",videoDetails.file_path,saveIn)
-
-/*
-        val file:File = File(videoDetails.file_path)
-        val map:MimeTypeMap = MimeTypeMap.getSingleton()
-        val ext:String = MimeTypeMap.getFileExtensionFromUrl(file.name)
-        var type:String? = map.getMimeTypeFromExtension(ext)
-
-        if(type==null) type =/* "*/*"
-
-        val intent:Intent = Intent(Intent.ACTION_VIEW)
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        val uri:Uri = Uri.fromFile(file)
-
-        intent.setDataAndType(uri,type)
-        val pendingIntent:PendingIntent = PendingIntent.getActivity(ContextKeeper.context,0,intent,0)
-        notification.builder.setContentIntent(pendingIntent)
-        notification.makeNotification()
-*/
 
         if (result != null && result!=SocketResult.SUCCESS)
                 Toast.makeText(ContextKeeper.context, "Error occurred check whether url is valid.", Toast.LENGTH_LONG).show()

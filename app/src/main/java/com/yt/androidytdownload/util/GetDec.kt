@@ -118,8 +118,9 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
             override fun onFailure(message: String?) {
                 Toast.makeText(ContextKeeper.context,"Converting failure",Toast.LENGTH_LONG).show()
-                notification.setContentText("Downloaded")
                 notification.builder.setProgress(0,0,false)
+                notification.setContentText("Downloaded")
+                notification.makeNotification()
                 println("failure")
             }
 
