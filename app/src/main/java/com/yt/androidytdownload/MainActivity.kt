@@ -22,6 +22,7 @@ import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
 import com.yt.androidytdownload.util.ContextKeeper
+import com.yt.androidytdownload.util.PortKeeper
 
 
 class MainActivity : AppCompatActivity() {
@@ -101,10 +102,11 @@ class MainActivity : AppCompatActivity() {
 
         val kindstr = kind.toString().toLowerCase()
 
-        val downloadTask: DownloadTask = DownloadTask( notification, button_download)
+        val port = PortKeeper.getNextPort()
+        val downloadTask: DownloadTask = DownloadTask( notification, button_download,port)
 
         val validTask: ValidTask =
-            ValidTask( downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr)
+            ValidTask( downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr,port)
         validTask.execute()
 
     }

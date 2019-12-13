@@ -25,14 +25,16 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
     val notification: MyNotification
     val downloadButton: Button
     var convertToMp3: Boolean
+    val port: Int
 
-    private var lastValue:Int
+    private var lastValue: Int
 
-    constructor(notification: MyNotification, downloadButton: Button) {
+    constructor(notification: MyNotification, downloadButton: Button, port: Int) {
         this.notification = notification
         this.downloadButton = downloadButton
         this.convertToMp3 = false
         this.lastValue = 0
+        this.port = port
     }
 
 
@@ -45,7 +47,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     override fun doInBackground(vararg p0: String?): SocketResult? {
 
-        val socket: DatagramSocket = DatagramSocket(SocketPort.Port.port)
+        val socket: DatagramSocket = DatagramSocket(port)
         var running: Boolean = true
         var buffer = ByteArray(256)
         var packet: DatagramPacket = DatagramPacket(buffer, buffer.size)
@@ -80,9 +82,9 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
         if (values[0] != null) {
             Log.d("Received:", values[0].toString())
 
-            val currentValue:Int = GetDecFromStr(values[0].toString())
+            val currentValue: Int = GetDecFromStr(values[0].toString())
 
-            if(currentValue==lastValue) return;
+            if (currentValue == lastValue) return;
             else lastValue = currentValue
 
             notification.builder.setProgress(100, currentValue, false)
@@ -96,9 +98,8 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
         if (convertToMp3)
             startConvertion("-i", videoDetails.file_path, videoDetails.file_path.replace(".mp4", ".mp3"), notification)
-
         else {
-            notification.builder.setProgress(0,0,false)
+            notification.builder.setProgress(100, 100, true)
             notification.setContentText("Downloaded")
 
 

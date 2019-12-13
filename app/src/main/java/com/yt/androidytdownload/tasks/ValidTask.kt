@@ -10,7 +10,6 @@ import com.chaquo.python.Python
 import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.util.ContextKeeper
-import com.yt.androidytdownload.util.SocketPort
 import com.yt.androidytdownload.util.deleteWhen
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -26,12 +25,13 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     val pyObj: PyObject
     val downloadTask: DownloadTask
     val progressBar: ProgressBar
+    val port:Int
 
     override fun onPreExecute() {
         downloadTask.downloadButton.isClickable = false
         progressBar.visibility = View.VISIBLE
         Thread(Runnable {
-            pyObj.callAttr("getVideoInfo", url, kindstr)
+            pyObj.callAttr("getVideoInfo", url, kindstr,port)
         }).start()
     }
 
@@ -41,7 +41,8 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
         python: Python,
         moduleName: String,
         url: String,
-        kindstr: String
+        kindstr: String,
+        port:Int
     ) {
         this.progressBar = progressBar
         this.videoDetails = VideoDetails("", "", "")
@@ -50,13 +51,14 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
         this.kindstr = kindstr
         this.python = python
         this.pyObj = python.getModule(moduleName)
+        this.port = port
     }
 
 
     override fun doInBackground(vararg p0: Void?): Boolean {
 
 
-        val socket: DatagramSocket = DatagramSocket(SocketPort.Port.port)
+        val socket: DatagramSocket = DatagramSocket(port)
         var running: Boolean = true
         var buffer = ByteArray(1024)
         var packet: DatagramPacket = DatagramPacket(buffer, buffer.size)
@@ -101,8 +103,10 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                         AlertDialog.Builder(ContextKeeper.context).setTitle("MP3")
                             .setMessage("Would you like to convert file to mp3?")
                             .setCancelable(false)
-                            .setPositiveButton("Yes", { dialog, which -> downloadTask.convertToMp3 = true;startDownload() })
-                            .setNegativeButton("No", { dialog, which -> startDownload()})
+                            .setPositiveButton(
+                                "Yes",
+                                { dialog, which -> downloadTask.convertToMp3 = true;startDownload() })
+                            .setNegativeButton("No", { dialog, which -> startDownload() })
                             .create()
                             .show()
                     })
@@ -125,10 +129,10 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
         downloadTask.downloadButton.isClickable = true
     }
 
-    private fun startDownload(){
+    private fun startDownload() {
         Toast.makeText(ContextKeeper.context, "Download " + videoDetails.title + " started", Toast.LENGTH_LONG).show()
         Thread(Runnable {
-            pyObj.callAttr("doDownload", url, kindstr)
+            pyObj.callAttr("doDownload", url, kindstr,port)
         }).start()
         downloadTask.videoDetails = videoDetails
         downloadTask.execute()

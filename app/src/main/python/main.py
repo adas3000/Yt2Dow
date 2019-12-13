@@ -3,7 +3,7 @@ import send
 import json
 
 
-def doDownload(url,kind,saveIn='/storage/emulated/0/download',port=5005) :
+def doDownload(url,kind,port,saveIn='/storage/emulated/0/download') :
 
    yt = None
    try:
@@ -20,18 +20,22 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download',port=5005) :
    else:
       video = yt.streams.first()
 
+
+   global pport
    global file_size
    global title
+
+   pport = port
    file_size = video.filesize
    title = video.title
   
 
    video.download(output_path=saveIn)
 
-def getVideoInfo(url,kind,saveIn='/storage/emulated/0/download',port=5005):
+def getVideoInfo(url,kind,port,saveIn='/storage/emulated/0/download'):
    yt = None
    try:
-      yt = YouTube(url,on_progress_callback=progress_function)
+      yt = YouTube(url)
       send.sendPacket('ok:Good url link',port)
    except:
       print("Error")
@@ -56,7 +60,7 @@ def getVideoInfo(url,kind,saveIn='/storage/emulated/0/download',port=5005):
 def progress_function(stream,chunk,file_handle,reamining):
     percent = (100*(file_size-reamining))/file_size
     value = "{:00.0f}% downloaded".format(percent)
-    send.sendPacket(value)
+    send.sendPacket(value,pport)
 
 
 

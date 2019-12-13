@@ -125,6 +125,25 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
             override fun onFailure(message: String?) {
                 notification.setContentText("Downloaded")
                 notification.builder.setProgress(0,0,false)
+                val file:File = File(from_2)
+                val map:MimeTypeMap = MimeTypeMap.getSingleton()
+
+
+                val ext:String = MimeTypeMap.getFileExtensionFromUrl(file.name)
+                var type:String? = map.getMimeTypeFromExtension(ext)
+
+                if(type==null) type ="*/*"
+
+                val intent:Intent = Intent(Intent.ACTION_VIEW)
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+                val uri:Uri = Uri.fromFile(file)
+
+                intent.setDataAndType(uri,type)
+                val pendingIntent:PendingIntent = PendingIntent.getActivity(ContextKeeper.context,0,intent,0)
+
+
+                notification.builder.setContentIntent(pendingIntent)
                 notification.makeNotification()
 
                 println("failure")
