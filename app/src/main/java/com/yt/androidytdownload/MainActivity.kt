@@ -1,10 +1,7 @@
 package com.yt.androidytdownload
 
 import android.Manifest
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -41,12 +38,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        radioGroup.check(radioButton_video.id)
-        progressBar.visibility = View.INVISIBLE
-        progressBar_circle.visibility = View.INVISIBLE
-
         ContextKeeper.context = this
-
+        setUi()
 
         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             hasPermissions = true
@@ -62,35 +55,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val fFmpeg:FFmpeg = FFmpeg.getInstance(this)
-        try{
-            fFmpeg.loadBinary(object : LoadBinaryResponseHandler() {
-                override fun onFinish() {
-                    super.onFinish()
-                }
-
-                override fun onSuccess() {
-                    super.onSuccess()
-                    println("FFmpeg loaded sucessfully")
-                }
-
-                override fun onFailure() {
-                    super.onFailure()
-                }
-
-                override fun onStart() {
-                    super.onStart()
-                }
-            })
-        }
-        catch(e:FFmpegNotSupportedException){
-            Toast.makeText(this,"FFmpeg not supported only audio files will be saved as .mp4 files", LENGTH_LONG).show()
-        }
-
-
+        loadFFmpeg()
+        
 
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         MyNotification.notificationManager = notificationManager
+    }
+
+    fun setUi(){
+        radioGroup.check(radioButton_video.id)
+        progressBar.visibility = View.INVISIBLE
+        progressBar_circle.visibility = View.INVISIBLE
     }
 
     fun onRadioButtonClick(view: View) {
@@ -133,5 +108,40 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    fun showUnsupportedDialog(){
+
+        val dialog:AlertDialog.Builder = AlertDialog.Builder(ContextKeeper.context)
+        dialog.setIcon(R.drawable.navigation_empty_icon)
+            .setTitle("Device not supported")
+            .setMessage("Your device doesn't support ffmpeg")
+            .setCancelable(false)
+            .setPositiveButton("Ok",{dialogInterface, i ->
+                this.finish()
+            })
+            .create()
+            .show()
+    }
+
+    fun loadFFmpeg(){
+        val fFmpeg:FFmpeg = FFmpeg.getInstance(ContextKeeper.context)
+        try{
+            fFmpeg.loadBinary(object : LoadBinaryResponseHandler() {
+
+                override fun onSuccess() {
+                    super.onSuccess()
+                    println("FFmpeg loaded sucessfully")
+                }
+
+                override fun onFailure() {
+                    showUnsupportedDialog()
+                }
+
+            })
+        }
+        catch(e:FFmpegNotSupportedException){
+            showUnsupportedDialog()
+        }
+    }
 
 }
