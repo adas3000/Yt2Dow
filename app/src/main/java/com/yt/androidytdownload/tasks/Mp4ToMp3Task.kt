@@ -1,28 +1,33 @@
 package com.yt.androidytdownload.tasks
 
-import android.app.Notification
 import android.os.AsyncTask
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.util.ContextKeeper
+import com.yt.androidytdownload.util.MyNotification
+import com.yt.androidytdownload.util.parseFFMpegOnProgressStr
 
 class Mp4ToMp3Task : AsyncTask<String,String,Void> {
 
     var videoDetails:VideoDetails
-    val notification:Notification
+    val notification:MyNotification
+    val maxValue:Int
+    val multipleBy:Int
 
-    constructor(videoDetails:VideoDetails,notification:Notification){
+    constructor(videoDetails:VideoDetails,notification:MyNotification,multipleBy:Int){
         this.videoDetails = videoDetails
         this.notification = notification
+        this.multipleBy = multipleBy
+        this.maxValue = videoDetails.file_size.toInt()*multipleBy
     }
 
 
     override fun onPreExecute() {
-
-
-
+        notification.builder.setContentText("Converting to mp3...")
+        notification.builder.setProgress(maxValue,0,false)
+        notification.makeNotification()
     }
 
 
@@ -66,6 +71,14 @@ class Mp4ToMp3Task : AsyncTask<String,String,Void> {
     }
 
     override fun onProgressUpdate(vararg values: String?) {
+
+        var value = values[0]
+
+        if(value!=null){
+            println(value)
+            notification.builder.setProgress(maxValue, parseFFMpegOnProgressStr(value),false)
+            notification.makeNotification()
+        }
 
 
     }

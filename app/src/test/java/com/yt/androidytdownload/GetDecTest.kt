@@ -57,7 +57,7 @@ class GetDecTest {
         assertEquals(2456, parseFFMpegOnProgressStr(str1))
         assertEquals(2323, parseFFMpegOnProgressStr(str2))
         assertEquals(10, parseFFMpegOnProgressStr(str3))
-        
+
     }
 
 
