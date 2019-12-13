@@ -17,10 +17,12 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
     var videoDetails:VideoDetails = VideoDetails("","","")
     val notification:MyNotification
     val downloadButton:Button
+    var convertToMp3:Boolean
 
     constructor(notification: MyNotification,downloadButton:Button) {
         this.notification = notification
         this.downloadButton = downloadButton
+        this.convertToMp3 = false
     }
 
 
@@ -78,7 +80,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
             .setProgress(100, 100, true)
 
 
-
+        if(convertToMp3)
         startConvertion("-i",videoDetails.file_path,videoDetails.file_path.replace(".mp4",".mp3"),notification)
 
 

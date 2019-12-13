@@ -74,8 +74,10 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
     val fMpeg: FFmpeg = FFmpeg.getInstance(ContextKeeper.context)
 
+    val from_2 = from.replace(";","").replace("|","")
 
-    val cmd = arrayOf(param,from,to)
+    val cmd = arrayOf(param,from_2,to)
+
     notification.setContentText("Converting...")
     notification.makeNotification()
     try{
@@ -89,7 +91,7 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
                 notification.setContentText("Downloaded")
                 notification.builder.setProgress(0,0,false)
 
-                val file_ToRemove:File = File(from)
+                val file_ToRemove:File = File(from_2)
 
                 if(!file_ToRemove.delete())
                     println("cannot remove old file")
@@ -117,10 +119,10 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
             }
 
             override fun onFailure(message: String?) {
-                Toast.makeText(ContextKeeper.context,"Converting failure",Toast.LENGTH_LONG).show()
-                notification.builder.setProgress(0,0,false)
                 notification.setContentText("Downloaded")
+                notification.builder.setProgress(0,0,false)
                 notification.makeNotification()
+
                 println("failure")
             }
 

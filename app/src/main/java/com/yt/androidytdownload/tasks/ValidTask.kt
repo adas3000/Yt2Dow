@@ -19,14 +19,13 @@ import java.net.InetAddress
 class ValidTask : AsyncTask<Void, Void, Boolean> {
 
 
-
     var videoDetails: VideoDetails
     val url: String
     val kindstr: String
     val python: Python
     val pyObj: PyObject
-    val downloadTask:DownloadTask
-    val progressBar:ProgressBar
+    val downloadTask: DownloadTask
+    val progressBar: ProgressBar
 
     override fun onPreExecute() {
         downloadTask.downloadButton.isClickable = false
@@ -36,9 +35,16 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
         }).start()
     }
 
-    constructor(downloadTask: DownloadTask,progressBar:ProgressBar,python:Python,moduleName:String,url: String, kindstr: String) {
+    constructor(
+        downloadTask: DownloadTask,
+        progressBar: ProgressBar,
+        python: Python,
+        moduleName: String,
+        url: String,
+        kindstr: String
+    ) {
         this.progressBar = progressBar
-        this.videoDetails = VideoDetails("", "","")
+        this.videoDetails = VideoDetails("", "", "")
         this.url = url
         this.downloadTask = downloadTask
         this.kindstr = kindstr
@@ -91,14 +97,16 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                 alertDialog.setMessage("Are you sure you wanna download below video?\nTitle:" + videoDetails.title + "\nSize(MB):" + videoDetails.file_size)
                     .setCancelable(false)
                     .setPositiveButton("Yes", { dialog, which ->
-                        Toast.makeText(ContextKeeper.context, "Download "+videoDetails.title+" started", Toast.LENGTH_LONG).show()
-                        Thread(Runnable {
-                            pyObj.callAttr("doDownload", url, kindstr)
-                        }).start()
-                        downloadTask.videoDetails = videoDetails
-                        downloadTask.execute()
+
+
+                        AlertDialog.Builder(ContextKeeper.context).setTitle("Convert")
+                            .setMessage("Would you like to convert file to mp3?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", { dialog, which -> downloadTask.convertToMp3 = true;startDownload() })
+                            .setNegativeButton("No", { dialog, which -> startDownload()})
                     })
-                    .setNegativeButton("No",{dialog,which->dialog.cancel();downloadTask.downloadButton.isClickable=true })
+                    .setNegativeButton("No",
+                        { dialog, which -> dialog.cancel();downloadTask.downloadButton.isClickable = true })
                     .create()
                     .show()
 
@@ -112,7 +120,16 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
             Toast.makeText(ContextKeeper.context, "Error-Result value is null", Toast.LENGTH_LONG).show()
 
 
-        downloadTask.downloadButton.isClickable=true
+        downloadTask.downloadButton.isClickable = true
+    }
+
+    private fun startDownload(){
+        Toast.makeText(ContextKeeper.context, "Download " + videoDetails.title + " started", Toast.LENGTH_LONG).show()
+        Thread(Runnable {
+            pyObj.callAttr("doDownload", url, kindstr)
+        }).start()
+        downloadTask.videoDetails = videoDetails
+        downloadTask.execute()
     }
 
 
