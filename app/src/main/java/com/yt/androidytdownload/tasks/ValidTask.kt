@@ -13,6 +13,7 @@ import com.chaquo.python.Python
 import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.CheckStatus
+import com.yt.androidytdownload.util.ContextKeeper
 import com.yt.androidytdownload.util.SocketPort
 import com.yt.androidytdownload.util.deleteWhen
 import java.net.DatagramPacket
@@ -22,7 +23,6 @@ import java.net.InetAddress
 class ValidTask : AsyncTask<Void, Void, Boolean> {
 
 
-    private val context: Context
 
     var videoDetails: VideoDetails
     val url: String
@@ -40,8 +40,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
         }).start()
     }
 
-    constructor(context: Context,downloadTask: DownloadTask,progressBar:ProgressBar,python:Python,moduleName:String,url: String, kindstr: String) {
-        this.context = context
+    constructor(downloadTask: DownloadTask,progressBar:ProgressBar,python:Python,moduleName:String,url: String, kindstr: String) {
         this.progressBar = progressBar
         this.videoDetails = VideoDetails("", "","")
         this.url = url
@@ -91,12 +90,12 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
         if (result != null) {
             if (result) {
 
-                val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
+                val alertDialog: AlertDialog.Builder = AlertDialog.Builder(ContextKeeper.context)
                 alertDialog.setTitle("Download")
                 alertDialog.setMessage("Are you sure you wanna download below video?\nTitle:" + videoDetails.title + "\nSize(MB):" + videoDetails.file_size)
                     .setCancelable(false)
                     .setPositiveButton("Yes", { dialog, which ->
-                        Toast.makeText(context, "Download "+videoDetails.title+" started", Toast.LENGTH_LONG).show()
+                        Toast.makeText(ContextKeeper.context, "Download "+videoDetails.title+" started", Toast.LENGTH_LONG).show()
                         Thread(Runnable {
                             pyObj.callAttr("doDownload", url, kindstr)
                         }).start()
@@ -109,12 +108,12 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
 
             } else
                 Toast.makeText(
-                    context,
+                    ContextKeeper.context,
                     "Cannot download video check your URL or internet connection",
                     Toast.LENGTH_LONG
                 ).show()
         } else
-            Toast.makeText(context, "Error-Result value is null", Toast.LENGTH_LONG).show()
+            Toast.makeText(ContextKeeper.context, "Error-Result value is null", Toast.LENGTH_LONG).show()
 
 
         downloadTask.downloadButton.isClickable=true

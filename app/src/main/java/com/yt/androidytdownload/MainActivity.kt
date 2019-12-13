@@ -28,6 +28,7 @@ import android.os.StrictMode
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
+import com.yt.androidytdownload.util.ContextKeeper
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,13 +45,13 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = View.INVISIBLE
         progressBar_circle.visibility = View.INVISIBLE
 
+        ContextKeeper.context = this
 
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "GRANTED", LENGTH_LONG).show()
+
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             hasPermissions = true
 
-        } else
-            Toast.makeText(this, "NOT GRANTED", LENGTH_LONG).show()
+
 
         if (Build.VERSION.SDK_INT >= 24) {
             try {
@@ -70,6 +71,7 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onSuccess() {
                     super.onSuccess()
+                    println("FFmpeg loaded sucessfully")
                 }
 
                 override fun onFailure() {
@@ -123,10 +125,10 @@ class MainActivity : AppCompatActivity() {
         val url: String = editText.text.toString()
         val kindstr = kind.toString().toLowerCase()
 
-        val downloadTask: DownloadTask = DownloadTask(this, notification, button_download)
+        val downloadTask: DownloadTask = DownloadTask( notification, button_download)
 
         val validTask: ValidTask =
-            ValidTask(this, downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr)
+            ValidTask( downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr)
         validTask.execute()
 
     }

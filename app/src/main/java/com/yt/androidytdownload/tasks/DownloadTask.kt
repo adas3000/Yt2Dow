@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.Toast
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.SocketResult
+import com.yt.androidytdownload.util.ContextKeeper
 import com.yt.androidytdownload.util.GetDecFromStr
 import com.yt.androidytdownload.util.MyNotification
 import com.yt.androidytdownload.util.SocketPort
@@ -22,13 +23,11 @@ import java.net.InetAddress
 class DownloadTask : AsyncTask<String, String, SocketResult> {
 
 
-    private val context: Context
     var videoDetails:VideoDetails = VideoDetails("","","")
     val notification:MyNotification
     val downloadButton:Button
 
-    constructor(context: Context, notification: MyNotification,downloadButton:Button) {
-        this.context = context
+    constructor(notification: MyNotification,downloadButton:Button) {
         this.notification = notification
         this.downloadButton = downloadButton
     }
@@ -98,7 +97,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
         val uri:Uri = Uri.fromFile(file)
 
         intent.setDataAndType(uri,type)
-        val pendingIntent:PendingIntent = PendingIntent.getActivity(context,0,intent,0)
+        val pendingIntent:PendingIntent = PendingIntent.getActivity(ContextKeeper.context,0,intent,0)
         notification.builder.setContentIntent(pendingIntent)
         notification.makeNotification()
 
@@ -106,9 +105,9 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
         if (result != null) {
             if (result==SocketResult.SUCCESS)
-                Toast.makeText(context, "Downloaded!", Toast.LENGTH_LONG).show()
+                Toast.makeText(ContextKeeper.context, "Downloaded!", Toast.LENGTH_LONG).show()
              else
-                Toast.makeText(context, "Error occurred check whether url is valid.", Toast.LENGTH_LONG).show()
+                Toast.makeText(ContextKeeper.context, "Error occurred check whether url is valid.", Toast.LENGTH_LONG).show()
         }
         downloadButton.isClickable = true
     }
