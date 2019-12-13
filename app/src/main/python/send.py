@@ -6,5 +6,5 @@ sock = socket.socket(socket.AF_INET,
 socket.SOCK_DGRAM) 
 
 
-def sendPacket(message):
-    sock.sendto(message.encode(),(UDP_IP,UDP_PORT))
+def sendPacket(message,port=5005):
+    sock.sendto(message.encode(),(UDP_IP,port))

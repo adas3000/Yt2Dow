@@ -3,15 +3,15 @@ import send
 import json
 
 
-def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
+def doDownload(url,kind,saveIn='/storage/emulated/0/download',port=5005) :
 
    yt = None
    try:
       yt = YouTube(url,on_progress_callback=progress_function)
-      send.sendPacket('ok:Good url link')
+      send.sendPacket('ok:Good url link',port)
    except:
       print("Error")
-      send.sendPacket('error:Non valid youtube url link!')
+      send.sendPacket('error:Non valid youtube url link!',port)
       return 
 
    video = None
@@ -28,14 +28,14 @@ def doDownload(url,kind,saveIn='/storage/emulated/0/download') :
 
    video.download(output_path=saveIn)
 
-def getVideoInfo(url,kind,saveIn='/storage/emulated/0/download'):
+def getVideoInfo(url,kind,saveIn='/storage/emulated/0/download',port=5005):
    yt = None
    try:
       yt = YouTube(url,on_progress_callback=progress_function)
-      send.sendPacket('ok:Good url link')
+      send.sendPacket('ok:Good url link',port)
    except:
       print("Error")
-      send.sendPacket('error:Non valid youtube url link!')
+      send.sendPacket('error:Non valid youtube url link!',port)
       return 
 
    video = None
@@ -49,7 +49,7 @@ def getVideoInfo(url,kind,saveIn='/storage/emulated/0/download'):
    filepath = saveIn+"/"+video.title+".mp4"
    print("file path: "+filepath)
 
-   send.sendPacket(json.dumps({"title":video.title,"file_size":mb_size,"file_path":filepath}))
+   send.sendPacket(json.dumps({"title":video.title,"file_size":mb_size,"file_path":filepath}),port)
    
 
 

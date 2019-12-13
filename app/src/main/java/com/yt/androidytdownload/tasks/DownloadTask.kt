@@ -96,6 +96,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
         if (convertToMp3)
             startConvertion("-i", videoDetails.file_path, videoDetails.file_path.replace(".mp4", ".mp3"), notification)
+
         else {
             notification.builder.setProgress(0,0,false)
             notification.setContentText("Downloaded")

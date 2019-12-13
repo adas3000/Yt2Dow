@@ -3,7 +3,6 @@ package com.yt.androidytdownload
 import android.Manifest
 import android.app.*
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.tasks.DownloadTask
@@ -39,13 +35,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         ContextKeeper.context = this
-        setUi()
 
+        setUi()
+        checkPermission()
+        loadFFmpeg()
+        setNotificationManager()
+
+    }
+
+    fun setNotificationManager(){
+        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        MyNotification.notificationManager = notificationManager
+    }
+
+
+    fun checkPermission(){
         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             hasPermissions = true
-
-
-
         if (Build.VERSION.SDK_INT >= 24) {
             try {
                 val m = StrictMode::class.java.getMethod("disableDeathOnFileUriExposure")
@@ -54,12 +60,6 @@ class MainActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
-
-        loadFFmpeg()
-
-
-        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        MyNotification.notificationManager = notificationManager
     }
 
     fun setUi(){
@@ -99,11 +99,6 @@ class MainActivity : AppCompatActivity() {
 
         val url: String = editText.text.toString()
 
-        var convert = true
-
-        if(kind==Kind.MP4)
-            convert = false
-
         val kindstr = kind.toString().toLowerCase()
 
         val downloadTask: DownloadTask = DownloadTask( notification, button_download)
@@ -118,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     fun showUnsupportedDialog(){
 
         val dialog:AlertDialog.Builder = AlertDialog.Builder(ContextKeeper.context)
-        dialog.setIcon(R.drawable.navigation_empty_icon)
+        dialog.setIcon(R.mipmap.ic_launcher)
             .setTitle("Device not supported")
             .setMessage("Your device doesn't support ffmpeg")
             .setCancelable(false)

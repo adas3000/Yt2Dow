@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import java.util.*
 
 class MyNotification {
 
@@ -18,12 +17,13 @@ class MyNotification {
     val channelId: String
     var builder: NotificationCompat.Builder
     var currentId : Int
+    var title:String
 
     constructor(channelId: String, channelName: String, context: Context) {
         this.channelId = channelId
         this.builder = NotificationCompat.Builder(context, this.channelId)
         this.currentId = count++
-
+        this.title=""
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             val notificationChannel: NotificationChannel =
@@ -47,6 +47,7 @@ class MyNotification {
     }
 
     fun setTitle(str:String):MyNotification{
+        this.title = str
         builder.setContentTitle(str)
         return this
     }

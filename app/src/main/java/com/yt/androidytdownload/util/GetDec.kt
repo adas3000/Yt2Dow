@@ -79,6 +79,7 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
     val cmd = arrayOf(param,from_2,to)
 
     notification.builder.setProgress(100,100,true)
+    notification.setTitle("Converting:"+notification.title)
     notification.setContentText("Converting...")
     notification.makeNotification()
     try{
