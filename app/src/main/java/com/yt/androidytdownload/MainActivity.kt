@@ -89,6 +89,12 @@ class MainActivity : AppCompatActivity() {
 
     fun onDownloadClick(view: View) {
 
+        if (!hasPermissions) {
+            Toast.makeText(this, "No permission to write in storage.Set permission in settins.", Toast.LENGTH_LONG)
+                .show()
+            return
+        }
+
         if (!ContextKeeper.downloadQueueEmpty) {
             Toast.makeText(this, "Wait till current file will be downloaded.", Toast.LENGTH_LONG).show()
             return
@@ -98,14 +104,10 @@ class MainActivity : AppCompatActivity() {
             "com.yt.androidyt.download.channel", "androidytdownloadsChannel"
             , this
         )
-        notification.setIcon(R.mipmap.ic_launcher).setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        notification.setIcon(R.mipmap.ic_yt_icon_foreground).setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
 
-        if (!hasPermissions) {
-            Toast.makeText(this, "No permission to write in storage.Set permission in settins.", Toast.LENGTH_LONG)
-                .show()
-            return
-        }
+
 
         val url: String = editText.text.toString()
 
