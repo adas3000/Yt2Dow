@@ -85,7 +85,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
             val currentValue: Int = GetDecFromStr(values[0].toString())
 
-            if (currentValue == lastValue) return;
+            if (currentValue == lastValue || !(currentValue>=lastValue+5))  return;
             else lastValue = currentValue
 
             notification.builder.setProgress(100, currentValue, false)
