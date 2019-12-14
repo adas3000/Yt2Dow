@@ -85,6 +85,12 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
     val fMpeg: FFmpeg = FFmpeg.getInstance(ContextKeeper.context)
 
 
+    val fileExist:File = File(to)
+
+    if(fileExist.exists()){
+        setNotificationOnTheEnd(notification,from,to)
+        return
+    }
 
     val cmd = arrayOf(param,from,to)
 
@@ -98,66 +104,19 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
         fMpeg.execute(cmd,object: ExecuteBinaryResponseHandler(){
             override fun onFinish() {
-                notification.builder.setProgress(0,0,false)
-                notification.makeNotification()
+                setNotificationOnTheEnd(notification,from,to)
             }
 
             override fun onSuccess(message: String?) {
                 println("success")
-                notification.setContentText("Downloaded")
-                notification.builder.setProgress(0,0,false)
-
-                val file_ToRemove:File = File(from)
-
-                if(!file_ToRemove.delete())
-                    println("cannot remove old file")
-
-                val file:File = File(to)
-                val map:MimeTypeMap = MimeTypeMap.getSingleton()
-
-
-                val ext:String = MimeTypeMap.getFileExtensionFromUrl(file.name)
-                var type:String? = map.getMimeTypeFromExtension(ext)
-
-                if(type==null) type ="*/*"
-
-                val intent:Intent = Intent(Intent.ACTION_VIEW)
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-                val uri:Uri = Uri.fromFile(file)
-
-                intent.setDataAndType(uri,type)
-                val pendingIntent:PendingIntent = PendingIntent.getActivity(ContextKeeper.context,0,intent,0)
-
-
-                notification.builder.setContentIntent(pendingIntent)
-                notification.makeNotification()
+                setNotificationOnTheEnd(notification,from,to)
             }
 
             override fun onFailure(message: String?) {
                 Toast.makeText(ContextKeeper.context,"Couldn't convert file:"+file_title,Toast.LENGTH_LONG).show()
-                notification.setContentText("Downloaded")
-                notification.builder.setProgress(0,0,false)
-                val file:File = File(from)
-                val map:MimeTypeMap = MimeTypeMap.getSingleton()
 
+                setNotificationOnTheEnd(notification,from,to)
 
-                val ext:String = MimeTypeMap.getFileExtensionFromUrl(file.name)
-                var type:String? = map.getMimeTypeFromExtension(ext)
-
-                if(type==null) type ="*/*"
-
-                val intent:Intent = Intent(Intent.ACTION_VIEW)
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-                val uri:Uri = Uri.fromFile(file)
-
-                intent.setDataAndType(uri,type)
-                val pendingIntent:PendingIntent = PendingIntent.getActivity(ContextKeeper.context,0,intent,0)
-
-
-                notification.builder.setContentIntent(pendingIntent)
-                notification.makeNotification()
 
                 println("failure")
             }
@@ -171,11 +130,35 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
     catch(e: FFmpegCommandAlreadyRunningException){
         println("FFmpegCommandAlreadyRunningException:"+e.message)
     }
+}
+
+fun setNotificationOnTheEnd(notification: MyNotification,from:String,to:String){
+    notification.setContentText("Downloaded")
+    notification.builder.setProgress(0,0,false)
+
+    val file_ToRemove:File = File(from)
+
+    if(!file_ToRemove.delete())
+        println("cannot remove old file")
+
+    val file:File = File(to)
+    val map:MimeTypeMap = MimeTypeMap.getSingleton()
 
 
+    val ext:String = MimeTypeMap.getFileExtensionFromUrl(file.name)
+    var type:String? = map.getMimeTypeFromExtension(ext)
+
+    if(type==null) type ="*/*"
+
+    val intent:Intent = Intent(Intent.ACTION_VIEW)
+    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+    val uri:Uri = Uri.fromFile(file)
+
+    intent.setDataAndType(uri,type)
+    val pendingIntent:PendingIntent = PendingIntent.getActivity(ContextKeeper.context,0,intent,0)
 
 
-
-
-
+    notification.builder.setContentIntent(pendingIntent)
+    notification.makeNotification()
 }

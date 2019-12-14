@@ -88,7 +88,8 @@ class MainActivity : AppCompatActivity() {
 
     fun onDownloadClick(view: View) {
 
-        var notification:MyNotification=MyNotification("com.yt.androidyt.download.channel","androidytdownloads",this)
+        var notification:MyNotification=MyNotification("com.yt.androidyt.download.channel","androidytdownloadsChannel"
+            ,this)
         notification.setIcon(R.mipmap.ic_launcher).setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
 
