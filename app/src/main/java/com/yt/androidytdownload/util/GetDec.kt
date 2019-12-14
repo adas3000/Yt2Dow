@@ -78,6 +78,7 @@ fun cutChars(str: String):String{
     println(answer)
     val re = Regex("[^A-Za-z0-9 ]")
     answer = re.replace(answer, "")
+
     return answer
 }
 
@@ -85,11 +86,9 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
     val fMpeg: FFmpeg = FFmpeg.getInstance(ContextKeeper.context)
 
-    val from_2 = from.replace(";","").replace("|","").replace("/","")
 
 
-
-    val cmd = arrayOf(param,from_2,to)
+    val cmd = arrayOf(param,from,to)
 
     val file_title = notification.title
 
@@ -110,7 +109,7 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
                 notification.setContentText("Downloaded")
                 notification.builder.setProgress(0,0,false)
 
-                val file_ToRemove:File = File(from_2)
+                val file_ToRemove:File = File(from)
 
                 if(!file_ToRemove.delete())
                     println("cannot remove old file")
@@ -141,7 +140,7 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
                 Toast.makeText(ContextKeeper.context,"Couldn't convert file:"+file_title,Toast.LENGTH_LONG).show()
                 notification.setContentText("Downloaded")
                 notification.builder.setProgress(0,0,false)
-                val file:File = File(from_2)
+                val file:File = File(from)
                 val map:MimeTypeMap = MimeTypeMap.getSingleton()
 
 

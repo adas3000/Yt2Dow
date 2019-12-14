@@ -29,10 +29,9 @@ def doDownload(url,kind,port,filename='',saveIn='/storage/emulated/0/download') 
    file_size = video.filesize
    title = video.title
   
-
    video.download(output_path=saveIn,filename=filename)
 
-def getVideoInfo(url,kind,port,saveIn='/storage/emulated/0/download'):
+def getVideoInfo(url,kind,port,filename='',saveIn='/storage/emulated/0/download'):
    yt = None
    try:
       yt = YouTube(url)
@@ -50,8 +49,7 @@ def getVideoInfo(url,kind,port,saveIn='/storage/emulated/0/download'):
 
    mb_size = video.filesize/1000000
    mb_size = "%.1f" % mb_size
-   filepath = saveIn+"/"+video.title+".mp4"
-   print("file path: "+filepath)
+   filepath = saveIn
 
    send.sendPacket(json.dumps({"title":video.title,"file_size":mb_size,"file_path":filepath}),port)
    
@@ -69,4 +67,4 @@ def percent(bytes,total):
    return perc
 
 
-doDownload('https://www.youtube.com/watch?v=v3zzEN-IAUc','mp4',5005,saveIn='')
+#doDownload('https://www.youtube.com/watch?v=6HdWvEdCNiY&list=RD6HdWvEdCNiY&start_radio=1','mp3',5005,"","")

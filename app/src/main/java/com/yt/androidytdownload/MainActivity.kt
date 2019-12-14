@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         val kindstr = kind.toString().toLowerCase()
 
         val port = PortKeeper.getNextPort()
-        val downloadTask: DownloadTask = DownloadTask( notification, button_download,port)
+        val downloadTask: DownloadTask = DownloadTask( notification, button_download,port,kind)
 
         val validTask: ValidTask =
             ValidTask( downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr,port)

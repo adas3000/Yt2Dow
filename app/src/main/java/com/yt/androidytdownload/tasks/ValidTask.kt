@@ -3,6 +3,8 @@ package com.yt.androidytdownload.tasks
 import android.app.AlertDialog
 import android.os.AsyncTask
 import android.view.View
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.chaquo.python.PyObject
@@ -133,13 +135,34 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     }
 
     private fun startDownload() {
-        videoDetails.title = cutChars(videoDetails.title)
+        videoDetails.title=cutChars(videoDetails.title)//todo namemp3.mp4 ---->>> in filename (unessesary mp3 before '.')
         Toast.makeText(ContextKeeper.context, "Download " + videoDetails.title + " started", Toast.LENGTH_LONG).show()
         Thread(Runnable {
             pyObj.callAttr("doDownload", url, kindstr,port, videoDetails.title)
         }).start()
         downloadTask.videoDetails = videoDetails
         downloadTask.execute()
+    }
+
+
+    private fun writeFileNameAlert(){
+
+        var rename = false
+
+        val editText:EditText= EditText(ContextKeeper.context)
+        val linearLayout:LinearLayout.LayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT)
+
+        editText.layoutParams = linearLayout
+
+        val alertDialog:AlertDialog.Builder = AlertDialog.Builder(ContextKeeper.context).setTitle("Rename")
+            .setMessage("Would you like to rename the file?(File with chars like '|' or 'ą' won't be recognized by filesystem and cannot be founded when you decided to " +
+                    "convert file to .mp3 )")
+            .setPositiveButton("Yes",{dialog,which->rename = true ;})
+            .setNegativeButton("No",{dialog,which->rename = false})
+            .setCancelable(false)
+            .setView(editText)
+
+
     }
 
 

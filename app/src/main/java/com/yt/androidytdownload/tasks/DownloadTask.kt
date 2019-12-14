@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.R
+import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.*
 import java.io.File
@@ -26,15 +27,18 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
     val downloadButton: Button
     var convertToMp3: Boolean
     val port: Int
+    val fileKind:Kind
+
 
     private var lastValue: Int
 
-    constructor(notification: MyNotification, downloadButton: Button, port: Int) {
+    constructor(notification: MyNotification, downloadButton: Button, port: Int,fileKind:Kind) {
         this.notification = notification
         this.downloadButton = downloadButton
         this.convertToMp3 = false
         this.lastValue = 0
         this.port = port
+        this.fileKind = fileKind
     }
 
 
@@ -95,9 +99,12 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     override fun onPostExecute(result: SocketResult?) {
 
+        if (convertToMp3){
+            val from = videoDetails.file_path+"/"+videoDetails.title+".mp4"
 
-        if (convertToMp3)
-            startConvertion("-i", videoDetails.file_path, videoDetails.file_path.replace(".mp4", ".mp3"), notification)
+            startConvertion("-i", from, from.replace("mp4","mp3"), notification)
+        }
+
         else {
             notification.builder.setProgress(100, 100, true)
             notification.setContentText("Downloaded")
