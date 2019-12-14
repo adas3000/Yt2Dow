@@ -60,6 +60,7 @@ class GetDecTest {
     @Test
     fun ifEqualsThenOk(){
         assertEquals("Lucky Luke  LYD Like You Do  Future House", cutChars("Lucky Luke - LYD (Like You Do) || Future House"))
+        assertEquals("moj", cutChars("moją"))
     }
 
 

@@ -73,9 +73,7 @@ fun parseFFMpegOnProgressStr(str:String):Int{
 fun cutChars(str: String):String{
 
     var answer = str
-    println(answer)
     answer = answer.replace("[^A-Za-z0-9 ]", "")
-    println(answer)
     val re = Regex("[^A-Za-z0-9 ]")
     answer = re.replace(answer, "")
 

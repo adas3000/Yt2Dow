@@ -4,13 +4,10 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
-import android.util.Log
 import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
 import com.yt.androidytdownload.Model.VideoDetails
-import com.yt.androidytdownload.R
 import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.enum.SocketResult
 import com.yt.androidytdownload.util.*
@@ -106,11 +103,11 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
         }
 
         else {
-            notification.builder.setProgress(100, 100, true)
-            notification.setContentText("Downloaded")
+            notification.builder.setProgress(0, 0, false)
+            notification.setTitle("Downloaded "+videoDetails.title)
 
 
-            val file: File = File(videoDetails.file_path)
+            val file: File = File(videoDetails.file_path+"/"+videoDetails.title+".mp4")
             val map: MimeTypeMap = MimeTypeMap.getSingleton()
 
 

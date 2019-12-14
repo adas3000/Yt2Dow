@@ -135,7 +135,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
     }
 
     private fun startDownload() {
-        videoDetails.title=cutChars(videoDetails.title)//todo namemp3.mp4 ---->>> in filename (unessesary mp3 before '.')
+        videoDetails.title=cutChars(videoDetails.title)
         Toast.makeText(ContextKeeper.context, "Download " + videoDetails.title + " started", Toast.LENGTH_LONG).show()
         Thread(Runnable {
             pyObj.callAttr("doDownload", url, kindstr,port, videoDetails.title)
