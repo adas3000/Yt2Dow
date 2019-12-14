@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.*
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.AsyncTask
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         ContextKeeper.context = this
+
+        editText.setText("https://www.youtube.com/watch?v=qH0yzmTvDTc")
 
         setUi()
         checkPermission()
@@ -108,7 +111,8 @@ class MainActivity : AppCompatActivity() {
 
         val validTask: ValidTask =
             ValidTask( downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr,port)
-        validTask.execute()
+        //validTask.execute()
+        validTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
     }
 

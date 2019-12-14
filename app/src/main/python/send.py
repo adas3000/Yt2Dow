@@ -8,4 +8,3 @@ socket.SOCK_DGRAM)
 
 def sendPacket(message,port):
     sock.sendto(message.encode(),(UDP_IP,port))
-    

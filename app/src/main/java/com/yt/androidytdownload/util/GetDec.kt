@@ -125,7 +125,7 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
             }
 
             override fun onProgress(message: String?) {
-                println("progress:"+message)
+                //println("progress:"+message)
             }
         })
 

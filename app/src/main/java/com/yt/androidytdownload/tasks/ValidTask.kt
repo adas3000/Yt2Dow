@@ -106,7 +106,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                     .setPositiveButton("Yes", { dialog, which ->
 
                         AlertDialog.Builder(ContextKeeper.context).setTitle("MP3")
-                            .setMessage("Would you like to convert file to mp3?")
+                            .setMessage("Would you like to convert file to mp3?(In large files it may even takes few minutes)")
                             .setCancelable(false)
                             .setPositiveButton(
                                 "Yes",
@@ -141,7 +141,8 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
             pyObj.callAttr("doDownload", url, kindstr,port, videoDetails.title)
         }).start()
         downloadTask.videoDetails = videoDetails
-        downloadTask.execute()
+        downloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+
     }
 
 

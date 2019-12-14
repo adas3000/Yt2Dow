@@ -24,12 +24,12 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
     val downloadButton: Button
     var convertToMp3: Boolean
     val port: Int
-    val fileKind:Kind
+    val fileKind: Kind
 
 
     private var lastValue: Int
 
-    constructor(notification: MyNotification, downloadButton: Button, port: Int,fileKind:Kind) {
+    constructor(notification: MyNotification, downloadButton: Button, port: Int, fileKind: Kind) {
         this.notification = notification
         this.downloadButton = downloadButton
         this.convertToMp3 = false
@@ -81,11 +81,11 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     override fun onProgressUpdate(vararg values: String?) {
         if (values[0] != null) {
-           //Log.d("Received:", values[0].toString())
+            //Log.d("Received:", values[0].toString())
 
             val currentValue: Int = GetDecFromStr(values[0].toString())
 
-            if (currentValue == lastValue || !(currentValue>=lastValue+5))  return;
+            if (currentValue == lastValue || !(currentValue >= lastValue + 5)) return
             else lastValue = currentValue
 
             notification.builder.setProgress(100, currentValue, false)
@@ -96,37 +96,13 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
     override fun onPostExecute(result: SocketResult?) {
 
-        if (convertToMp3){
-            val from = videoDetails.file_path+"/"+videoDetails.title+".mp4"
+        if (convertToMp3) {
+            val from = videoDetails.file_path + "/" + videoDetails.title + ".mp4"
 
-            startConvertion("-i", from, from.replace("mp4","mp3"), notification)
-        }
+            startConvertion("-i", from, from.replace("mp4", "mp3"), notification)
+        } else {
 
-        else {
-            notification.builder.setProgress(0, 0, false)
-            notification.setTitle("Downloaded "+videoDetails.title)
-
-
-            val file: File = File(videoDetails.file_path+"/"+videoDetails.title+".mp4")
-            val map: MimeTypeMap = MimeTypeMap.getSingleton()
-
-
-            val ext: String = MimeTypeMap.getFileExtensionFromUrl(file.name)
-            var type: String? = map.getMimeTypeFromExtension(ext)
-
-            if (type == null) type = "*/*"
-
-            val intent: Intent = Intent(Intent.ACTION_VIEW)
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-            val uri: Uri = Uri.fromFile(file)
-
-            intent.setDataAndType(uri, type)
-            val pendingIntent: PendingIntent = PendingIntent.getActivity(ContextKeeper.context, 0, intent, 0)
-
-
-            notification.builder.setContentIntent(pendingIntent)
-            notification.makeNotification()
+            setNotificationOnTheEnd(notification, videoDetails.file_path + "/" + videoDetails.title + ".mp4")
 
         }
 
