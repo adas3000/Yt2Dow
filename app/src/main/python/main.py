@@ -66,5 +66,3 @@ def percent(bytes,total):
    perc = (float(bytes)/float(total)) * float(100)
    return perc
 
-
-#doDownload('https://www.youtube.com/watch?v=6HdWvEdCNiY&list=RD6HdWvEdCNiY&start_radio=1','mp3',5005,"","")
