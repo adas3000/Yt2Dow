@@ -88,7 +88,8 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
     val fileExist:File = File(to)
 
     if(fileExist.exists()){
-        setNotificationOnTheEnd(notification,from,to)
+        removeFile(from)
+        setNotificationOnTheEnd(notification,to)
         return
     }
 
@@ -104,18 +105,20 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
 
         fMpeg.execute(cmd,object: ExecuteBinaryResponseHandler(){
             override fun onFinish() {
-                setNotificationOnTheEnd(notification,from,to)
+                removeFile(from)
+                setNotificationOnTheEnd(notification,to)
             }
 
             override fun onSuccess(message: String?) {
                 println("success")
-                setNotificationOnTheEnd(notification,from,to)
+                removeFile(from)
+                setNotificationOnTheEnd(notification,to)
             }
 
             override fun onFailure(message: String?) {
                 Toast.makeText(ContextKeeper.context,"Couldn't convert file:"+file_title,Toast.LENGTH_LONG).show()
-
-                setNotificationOnTheEnd(notification,from,to)
+                removeFile(from)
+                setNotificationOnTheEnd(notification,to)
 
 
                 println("failure")
@@ -132,14 +135,11 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
     }
 }
 
-fun setNotificationOnTheEnd(notification: MyNotification,from:String,to:String){
+fun setNotificationOnTheEnd(notification: MyNotification,to:String){
+
     notification.setContentText("Downloaded")
     notification.builder.setProgress(0,0,false)
 
-    val file_ToRemove:File = File(from)
-
-    if(!file_ToRemove.delete())
-        println("cannot remove old file")
 
     val file:File = File(to)
     val map:MimeTypeMap = MimeTypeMap.getSingleton()
@@ -161,4 +161,11 @@ fun setNotificationOnTheEnd(notification: MyNotification,from:String,to:String){
 
     notification.builder.setContentIntent(pendingIntent)
     notification.makeNotification()
+}
+
+fun removeFile(from:String){
+    val file_ToRemove:File = File(from)
+
+    if(!file_ToRemove.delete())
+        println("cannot remove old file")
 }
