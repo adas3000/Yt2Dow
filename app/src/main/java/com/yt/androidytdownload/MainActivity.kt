@@ -31,14 +31,11 @@ class MainActivity : AppCompatActivity() {
     private var kind: Kind = Kind.MP4
     var hasPermissions = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         ContextKeeper.context = this
-
-        editText.setText("https://www.youtube.com/watch?v=qH0yzmTvDTc")
 
         setUi()
         checkPermission()
@@ -47,13 +44,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun setNotificationManager(){
-        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    fun setNotificationManager() {
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         MyNotification.notificationManager = notificationManager
     }
 
 
-    fun checkPermission(){
+    fun checkPermission() {
         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             hasPermissions = true
         if (Build.VERSION.SDK_INT >= 24) {
@@ -66,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setUi(){
+    fun setUi() {
         radioGroup.check(radioButton_video.id)
         progressBar.visibility = View.INVISIBLE
         progressBar_circle.visibility = View.INVISIBLE
@@ -91,8 +89,15 @@ class MainActivity : AppCompatActivity() {
 
     fun onDownloadClick(view: View) {
 
-        var notification:MyNotification=MyNotification("com.yt.androidyt.download.channel","androidytdownloadsChannel"
-            ,this)
+        if (!ContextKeeper.downloadQueueEmpty) {
+            Toast.makeText(this, "Wait till current file will be downloaded.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        var notification: MyNotification = MyNotification(
+            "com.yt.androidyt.download.channel", "androidytdownloadsChannel"
+            , this
+        )
         notification.setIcon(R.mipmap.ic_launcher).setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
 
@@ -107,33 +112,32 @@ class MainActivity : AppCompatActivity() {
         val kindstr = kind.toString().toLowerCase()
 
         val port = PortKeeper.getNextPort()
-        val downloadTask: DownloadTask = DownloadTask( notification, button_download,port,kind)
+        val downloadTask: DownloadTask = DownloadTask(notification, button_download, port, kind)
 
         val validTask: ValidTask =
-            ValidTask( downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr,port)
-        //validTask.execute()
+            ValidTask(downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr, port)
         validTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-
+        ContextKeeper.downloadQueueEmpty = false
     }
 
 
-    fun showUnsupportedDialog(){
+    fun showUnsupportedDialog() {
 
-        val dialog:AlertDialog.Builder = AlertDialog.Builder(ContextKeeper.context)
+        val dialog: AlertDialog.Builder = AlertDialog.Builder(ContextKeeper.context)
         dialog.setIcon(R.mipmap.ic_launcher)
             .setTitle("Device not supported")
             .setMessage("Your device doesn't support ffmpeg")
             .setCancelable(false)
-            .setPositiveButton("Ok",{dialogInterface, i ->
+            .setPositiveButton("Ok", { dialogInterface, i ->
                 this.finish()
             })
             .create()
             .show()
     }
 
-    fun loadFFmpeg(){
-        val fFmpeg:FFmpeg = FFmpeg.getInstance(ContextKeeper.context)
-        try{
+    fun loadFFmpeg() {
+        val fFmpeg: FFmpeg = FFmpeg.getInstance(ContextKeeper.context)
+        try {
             fFmpeg.loadBinary(object : LoadBinaryResponseHandler() {
 
                 override fun onSuccess() {
@@ -146,8 +150,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
-        }
-        catch(e:FFmpegNotSupportedException){
+        } catch (e: FFmpegNotSupportedException) {
             showUnsupportedDialog()
         }
     }

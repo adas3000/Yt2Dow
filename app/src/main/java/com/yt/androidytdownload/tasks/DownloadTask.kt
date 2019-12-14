@@ -98,12 +98,10 @@ class DownloadTask : AsyncTask<String, String, SocketResult> {
 
         if (convertToMp3) {
             val from = videoDetails.file_path + "/" + videoDetails.title + ".mp4"
-
             startConvertion("-i", from, from.replace("mp4", "mp3"), notification)
         } else {
 
             setNotificationOnTheEnd(notification, videoDetails.file_path + "/" + videoDetails.title + ".mp4")
-
         }
 
 

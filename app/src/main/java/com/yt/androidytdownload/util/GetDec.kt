@@ -107,6 +107,7 @@ fun startConvertion(param:String,from:String,to:String,notification: MyNotificat
             override fun onFinish() {
                 removeFile(from)
                 setNotificationOnTheEnd(notification,to)
+
             }
 
             override fun onSuccess(message: String?) {
@@ -161,6 +162,7 @@ fun setNotificationOnTheEnd(notification: MyNotification,to:String){
 
     notification.builder.setContentIntent(pendingIntent)
     notification.makeNotification()
+    ContextKeeper.downloadQueueEmpty = true
 }
 
 fun removeFile(from:String){

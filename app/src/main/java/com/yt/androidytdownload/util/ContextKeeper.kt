@@ -6,6 +6,7 @@ class ContextKeeper {
 
     companion object{
         var context : Context? = null
+        var downloadQueueEmpty = true
     }
 
 

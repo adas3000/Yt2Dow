@@ -117,7 +117,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean> {
                     })
 
                     .setNegativeButton("No",
-                        { dialog, which -> dialog.cancel();downloadTask.downloadButton.isClickable = true })
+                        { dialog, which -> dialog.cancel();downloadTask.downloadButton.isClickable = true;ContextKeeper.downloadQueueEmpty = true })
                     .create()
                     .show()
 
