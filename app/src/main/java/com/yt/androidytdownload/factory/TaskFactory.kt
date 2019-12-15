@@ -7,12 +7,16 @@ import androidx.core.app.NotificationCompat
 import com.chaquo.python.Python
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.R
+import com.yt.androidytdownload.components.DaggerMyNotifyComponent
+import com.yt.androidytdownload.components.MyNotifyComponent
 import com.yt.androidytdownload.enums.Kind
 import com.yt.androidytdownload.tasks.AbstractTask
 import com.yt.androidytdownload.tasks.DownloadTask
 import com.yt.androidytdownload.tasks.ValidTask
+import com.yt.androidytdownload.util.ContextKeeper
 import com.yt.androidytdownload.util.MyNotification
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
 class TaskFactory {
 
@@ -20,14 +24,14 @@ class TaskFactory {
     val progressBar: ProgressBar
     val python: Python
     val moduleName:String
-    val context:Context
+    val notification:MyNotification
 
-    constructor(downloadButton: Button, progressBar: ProgressBar,context: Context, python: Python= Python.getInstance(), mainName:String="main"){
+    constructor(downloadButton: Button, progressBar: ProgressBar,notification: MyNotification, python: Python= Python.getInstance(), mainName:String="main"){
         this.downloadButton = downloadButton
         this.progressBar = progressBar
         this.python = python
         this.moduleName =mainName
-        this.context = context
+        this.notification = notification
     }
 
 
@@ -43,12 +47,7 @@ class TaskFactory {
 
         }
         else if(type_Str.equals("downloadtask")){
-
-            val notify = MyNotification("com.yt.androidyt.download.channel", "androidytdownloadsChannel",context)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setIcon(R.mipmap.ic_yt_icon_foreground)
-
-            task = DownloadTask(notify, downloadButton,port,kindstr,videoDetails ,convertToMp3)
+            task = DownloadTask(notification, downloadButton,port,kindstr,videoDetails ,convertToMp3)
         }
         else throw IllegalArgumentException("No such task")
 

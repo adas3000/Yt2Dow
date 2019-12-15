@@ -18,9 +18,12 @@ import android.os.StrictMode
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
+import com.yt.androidytdownload.components.DaggerMyNotifyComponent
+import com.yt.androidytdownload.components.MyNotifyComponent
 import com.yt.androidytdownload.factory.TaskFactory
 import com.yt.androidytdownload.tasks.TaskProcess
 import com.yt.androidytdownload.util.ContextKeeper
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,16 +32,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var taskProcess: TaskProcess
     var hasPermissions = false
 
+    @Inject
+    lateinit var notification: MyNotification
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        taskProcess = TaskProcess(TaskFactory(button_download,progressBar_circle,this))
-
-
-
-
         ContextKeeper.context = this
+
+        val myNotifyComponent: MyNotifyComponent = DaggerMyNotifyComponent.create()
+        myNotifyComponent.inject(this)
+
+        taskProcess = TaskProcess(TaskFactory(button_download, progressBar_circle,notification))
+
+
         ContextKeeper.taskProcess = taskProcess
 
         setUi()
@@ -47,8 +55,6 @@ class MainActivity : AppCompatActivity() {
         setNotificationManager()
 
     }
-
-
 
 
     fun setNotificationManager() {
@@ -116,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         val url: String = editText.text.toString()
 
 
-        taskProcess.doAction(url,kind,"validtask")
+        taskProcess.doAction(url, kind, "validtask")
     }
 
 

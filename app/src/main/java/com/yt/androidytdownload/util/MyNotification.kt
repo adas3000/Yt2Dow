@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import javax.inject.Inject
 
 class MyNotification {
 
@@ -19,6 +20,7 @@ class MyNotification {
     var currentId : Int
     var title:String
 
+    @Inject
     constructor(channelId: String, channelName: String, context: Context) {
         this.channelId = channelId
         this.builder = NotificationCompat.Builder(context, this.channelId)
@@ -41,6 +43,9 @@ class MyNotification {
         return this
     }
 
+    fun updateId(){
+        currentId++
+    }
 
     fun makeNotification() {
         notificationManager?.notify(currentId,builder.build())

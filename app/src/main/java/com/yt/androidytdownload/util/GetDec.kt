@@ -162,6 +162,7 @@ fun setNotificationOnTheEnd(notification: MyNotification,to:String){
 
     notification.builder.setContentIntent(pendingIntent)
     notification.makeNotification()
+    notification.updateId()
     ContextKeeper.downloadQueueEmpty = true
 }
 
