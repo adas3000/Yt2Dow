@@ -142,7 +142,7 @@ class ValidTask : AsyncTask<Void, Void, Boolean>,AbstractTask {
             pyObj.callAttr("doDownload", url, kind.toString().toLowerCase(),port, videoDetails.title)
         }).start()
 
-        ContextKeeper.taskProcess?.doAction(url,kind,"downloadtask",convertToMp3)
+        ContextKeeper.taskProcess?.doAction(url,kind,"downloadtask",videoDetails,convertToMp3,port)
     }
 
 

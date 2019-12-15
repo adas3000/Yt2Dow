@@ -17,7 +17,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> , AbstractTask {
         this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
-    var videoDetails: VideoDetails = VideoDetails("", "", "")
+    val videoDetails: VideoDetails
     val notification: MyNotification
     val downloadButton: Button
     var convertToMp3: Boolean
@@ -27,7 +27,8 @@ class DownloadTask : AsyncTask<String, String, SocketResult> , AbstractTask {
 
     private var lastValue: Int
 
-    constructor(notification: MyNotification, downloadButton: Button, port: Int, fileKind: Kind,convertToMp3:Boolean = false) {
+    constructor(notification: MyNotification, downloadButton: Button, port: Int, fileKind: Kind, videoDetails: VideoDetails,convertToMp3:Boolean = false) {
+        this.videoDetails = videoDetails
         this.notification = notification
         this.downloadButton = downloadButton
         this.convertToMp3 = convertToMp3
@@ -38,7 +39,6 @@ class DownloadTask : AsyncTask<String, String, SocketResult> , AbstractTask {
 
 
     override fun onPreExecute() {
-        println("preexecute")
         notification.setTitle(videoDetails.title)
         notification.setContentText("Size(MB):" + videoDetails.file_size)
         notification.builder.setProgress(100, lastValue, false)

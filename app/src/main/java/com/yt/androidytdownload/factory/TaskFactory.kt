@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import androidx.core.app.NotificationCompat
 import com.chaquo.python.Python
+import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.R
 import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.tasks.AbstractTask
@@ -32,7 +33,7 @@ class TaskFactory {
     }
 
 
-    fun createTask(url:String,kindstr:Kind,type:String,convertToMp3:Boolean = false):AbstractTask{
+    fun createTask(url:String,kindstr:Kind,type:String,videoDetails: VideoDetails,convertToMp3:Boolean = false,port:Int):AbstractTask{
 
         val type_Str = type.toLowerCase()
 
@@ -40,7 +41,7 @@ class TaskFactory {
 
         if(type_Str.equals("validtask")){
 
-            task = ValidTask(progressBar,python,moduleName,url,kindstr,PortKeeper.getNextPort())
+            task = ValidTask(progressBar,python,moduleName,url,kindstr,port)
 
         }
         else if(type_Str.equals("downloadtask")){
@@ -49,7 +50,7 @@ class TaskFactory {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setIcon(R.mipmap.ic_yt_icon_foreground)
 
-            task = DownloadTask(notify, downloadButton,PortKeeper.getNextPort(),kindstr, convertToMp3)
+            task = DownloadTask(notify, downloadButton,port,kindstr,videoDetails ,convertToMp3)
         }
         else throw IllegalArgumentException("No such task")
 
