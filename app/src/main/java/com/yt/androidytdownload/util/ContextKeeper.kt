@@ -6,9 +6,9 @@ import com.yt.androidytdownload.tasks.TaskProcess
 class ContextKeeper {
 
     companion object{
-        var context : Context? = null
+        lateinit var context : Context
         var downloadQueueEmpty = true
-        var taskProcess:TaskProcess? = null
+        lateinit var taskProcess:TaskProcess
     }
 
 

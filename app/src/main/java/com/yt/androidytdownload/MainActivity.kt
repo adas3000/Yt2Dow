@@ -26,7 +26,7 @@ import com.yt.androidytdownload.util.ContextKeeper
 class MainActivity : AppCompatActivity() {
 
     private var kind: Kind = Kind.MP4
-    private var taskProcess: TaskProcess? = null
+    private lateinit var taskProcess: TaskProcess
     var hasPermissions = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,8 +111,7 @@ class MainActivity : AppCompatActivity() {
         val url: String = editText.text.toString()
 
 
-        taskProcess?.doAction(url,kind,"validtask")
-
+        taskProcess.doAction(url,kind,"validtask")
     }
 
 
