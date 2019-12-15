@@ -18,7 +18,10 @@ import android.os.StrictMode
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
+import com.yt.androidytdownload.components.DaggerMainActivityComponent
+import com.yt.androidytdownload.components.MainActivityComponent
 import com.yt.androidytdownload.factory.TaskFactory
+import com.yt.androidytdownload.modules.MainActivityModule
 import com.yt.androidytdownload.tasks.TaskProcess
 import com.yt.androidytdownload.util.ContextKeeper
 
@@ -34,6 +37,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         taskProcess = TaskProcess(TaskFactory(button_download,progressBar_circle,this))
+
+        val mainActivityComponent:MainActivityComponent = DaggerMainActivityComponent.builder()
+            .mainActivityModule(MainActivityModule(this)).build()
 
 
         ContextKeeper.context = this
