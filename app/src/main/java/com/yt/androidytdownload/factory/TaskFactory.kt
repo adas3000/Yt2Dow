@@ -1,6 +1,5 @@
 package com.yt.androidytdownload.factory
 
-import android.app.Notification
 import android.content.Context
 import android.widget.Button
 import android.widget.ProgressBar
@@ -8,12 +7,11 @@ import androidx.core.app.NotificationCompat
 import com.chaquo.python.Python
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.R
-import com.yt.androidytdownload.enum.Kind
+import com.yt.androidytdownload.enums.Kind
 import com.yt.androidytdownload.tasks.AbstractTask
 import com.yt.androidytdownload.tasks.DownloadTask
 import com.yt.androidytdownload.tasks.ValidTask
 import com.yt.androidytdownload.util.MyNotification
-import com.yt.androidytdownload.util.PortKeeper
 import java.lang.IllegalArgumentException
 
 class TaskFactory {

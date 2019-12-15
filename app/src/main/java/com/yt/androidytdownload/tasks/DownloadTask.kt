@@ -4,8 +4,8 @@ import android.os.AsyncTask
 import android.widget.Button
 import android.widget.Toast
 import com.yt.androidytdownload.Model.VideoDetails
-import com.yt.androidytdownload.enum.Kind
-import com.yt.androidytdownload.enum.SocketResult
+import com.yt.androidytdownload.enums.Kind
+import com.yt.androidytdownload.enums.SocketResult
 import com.yt.androidytdownload.util.*
 import java.net.DatagramPacket
 import java.net.DatagramSocket

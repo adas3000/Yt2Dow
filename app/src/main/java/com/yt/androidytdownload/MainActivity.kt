@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import com.yt.androidytdownload.enum.Kind
+import com.yt.androidytdownload.enums.Kind
 import com.yt.androidytdownload.util.MyNotification
 import kotlinx.android.synthetic.main.activity_main.*
 import android.os.StrictMode

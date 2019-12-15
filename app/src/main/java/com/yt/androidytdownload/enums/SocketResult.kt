@@ -1,4 +1,4 @@
-package com.yt.androidytdownload.enum
+package com.yt.androidytdownload.enums
 
 enum class SocketResult {
     SUCCESS,

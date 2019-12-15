@@ -9,7 +9,7 @@ import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import com.google.gson.Gson
 import com.yt.androidytdownload.Model.VideoDetails
-import com.yt.androidytdownload.enum.Kind
+import com.yt.androidytdownload.enums.Kind
 import com.yt.androidytdownload.util.ContextKeeper
 import com.yt.androidytdownload.util.cutChars
 import com.yt.androidytdownload.util.deleteWhen
