@@ -18,7 +18,12 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-class ValidTask : AsyncTask<Void, Void, Boolean> {
+class ValidTask : AsyncTask<Void, Void, Boolean>,AbstractTask {
+
+
+    override fun doExecute(){
+        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+    }
 
 
     var videoDetails: VideoDetails

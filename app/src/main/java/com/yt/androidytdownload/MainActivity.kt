@@ -116,6 +116,8 @@ class MainActivity : AppCompatActivity() {
         val port = PortKeeper.getNextPort()
         val downloadTask: DownloadTask = DownloadTask(notification, button_download, port, kind)
 
+
+
         val validTask: ValidTask =
             ValidTask(downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr, port)
         validTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)

@@ -16,8 +16,11 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-class DownloadTask : AsyncTask<String, String, SocketResult> {
+class DownloadTask : AsyncTask<String, String, SocketResult> , AbstractTask {
 
+    override fun doExecute() {
+        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+    }
 
     var videoDetails: VideoDetails = VideoDetails("", "", "")
     val notification: MyNotification
