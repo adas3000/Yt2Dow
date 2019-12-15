@@ -3,6 +3,7 @@ package com.yt.androidytdownload.tasks
 import com.yt.androidytdownload.Model.VideoDetails
 import com.yt.androidytdownload.enum.Kind
 import com.yt.androidytdownload.factory.TaskFactory
+import com.yt.androidytdownload.util.ContextKeeper
 import com.yt.androidytdownload.util.PortKeeper
 
 class TaskProcess {
@@ -17,6 +18,7 @@ class TaskProcess {
                  convertToMp3: Boolean = false,port:Int = PortKeeper.getNextPort()) {
 
         val task: AbstractTask = taskFactory.createTask(url, kindstr, type,videoDetails ,convertToMp3,port)
+        ContextKeeper.downloadQueueEmpty = false
 
         task.doExecute()
     }
