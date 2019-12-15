@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.*
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.AsyncTask
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,30 +11,33 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import com.chaquo.python.Python
 import com.yt.androidytdownload.enum.Kind
-import com.yt.androidytdownload.tasks.DownloadTask
-import com.yt.androidytdownload.tasks.ValidTask
 import com.yt.androidytdownload.util.MyNotification
 import kotlinx.android.synthetic.main.activity_main.*
 import android.os.StrictMode
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
+import com.yt.androidytdownload.factory.TaskFactory
+import com.yt.androidytdownload.tasks.TaskProcess
 import com.yt.androidytdownload.util.ContextKeeper
-import com.yt.androidytdownload.util.PortKeeper
 
 
 class MainActivity : AppCompatActivity() {
 
     private var kind: Kind = Kind.MP4
+    private var taskProcess: TaskProcess? = null
     var hasPermissions = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        taskProcess = TaskProcess(TaskFactory(button_download,progressBar_circle,this))
+
+
         ContextKeeper.context = this
+        ContextKeeper.taskProcess = taskProcess
 
         setUi()
         checkPermission()
@@ -66,7 +68,6 @@ class MainActivity : AppCompatActivity() {
 
     fun setUi() {
         radioGroup.check(radioButton_video.id)
-        progressBar.visibility = View.INVISIBLE
         progressBar_circle.visibility = View.INVISIBLE
     }
 
@@ -107,21 +108,11 @@ class MainActivity : AppCompatActivity() {
         notification.setIcon(R.mipmap.ic_yt_icon_foreground).setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
 
-
-
         val url: String = editText.text.toString()
 
-        val kindstr = kind.toString().toLowerCase()
 
-        val port = PortKeeper.getNextPort()
-        val downloadTask: DownloadTask = DownloadTask(notification, button_download, port, kind)
+        taskProcess?.doAction(url,kind,"validtask")
 
-
-
-        val validTask: ValidTask =
-            ValidTask(downloadTask, progressBar_circle, Python.getInstance(), "main", url, kindstr, port)
-        validTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        ContextKeeper.downloadQueueEmpty = false
     }
 
 

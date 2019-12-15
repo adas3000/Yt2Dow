@@ -27,10 +27,10 @@ class DownloadTask : AsyncTask<String, String, SocketResult> , AbstractTask {
 
     private var lastValue: Int
 
-    constructor(notification: MyNotification, downloadButton: Button, port: Int, fileKind: Kind) {
+    constructor(notification: MyNotification, downloadButton: Button, port: Int, fileKind: Kind,convertToMp3:Boolean = false) {
         this.notification = notification
         this.downloadButton = downloadButton
-        this.convertToMp3 = false
+        this.convertToMp3 = convertToMp3
         this.lastValue = 0
         this.port = port
         this.fileKind = fileKind
@@ -38,6 +38,7 @@ class DownloadTask : AsyncTask<String, String, SocketResult> , AbstractTask {
 
 
     override fun onPreExecute() {
+        println("preexecute")
         notification.setTitle(videoDetails.title)
         notification.setContentText("Size(MB):" + videoDetails.file_size)
         notification.builder.setProgress(100, lastValue, false)
